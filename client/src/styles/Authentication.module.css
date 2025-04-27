@@ -1,0 +1,127 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap');
+
+:root {
+  /* Backgrounds */
+  --bg-offwhite:           #f2f2ef;   /* main header */
+  --bg-input:              #ffffff;   /* dropdown menus */
+
+  /* Borders */
+  --border-light:          #dcdcdc;   /* not used here */
+
+  /* Text colors */
+  --text-heading:          #1f1f1f;   /* logo */
+  --text-body:             #505050;   /* nav items, links */
+
+  /* Buttons & accents */
+  --btn-primary-bg:        #8a8f79;   /* hover state accent */
+  --btn-primary-bg-hover:  #7a7e6e;   /* active accent */
+
+  /* Links */
+  --link-default:          #686c5b;   /* unused here */
+  --link-hover:            #545a48;   /* unused here */
+
+  /* Typography */
+  --body-font:    'Jost', sans-serif;
+  --heading-font: 'Marcellus', serif;
+}
+/* Container for Login/Signup */
+.authContainer {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 2rem;
+  background-color: var(--bg-offwhite);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border-radius: 1rem;
+  font-family: var(--body-font);
+}
+
+.authContainer h2 {
+  font-family: var(--heading-font);
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--text-heading);
+  font-size: 2rem;
+}
+
+/* Shared form styles */
+.form {
+  /* Stop using flex so labels/inputs stack */
+  display: block;
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+  /* center the contents of each group */
+  text-align: center;
+}
+
+.label {
+  /* force on its own line */
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: var(--text-body);
+  font-weight: 500;
+}
+
+.input {
+  /* block so margin auto can center */
+  display: block;
+  width: 80%;           /* adjust as needed */
+  max-width: 300px;     /* optional cap */
+  margin: 0 auto;       /* center horizontally */
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  background-color: var(--bg-input);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--btn-primary-bg);
+  box-shadow: 0 0 0 3px rgba(138, 143, 121, 0.2);
+}
+
+/* Primary action button (Login / Sign Up) */
+.actionBtn {
+  width: 100%;
+  padding: 0.85rem;
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: var(--body-font);
+}
+
+.actionBtn:hover {
+  background-color: var(--btn-primary-bg-hover);
+}
+
+.actionBtn:active {
+  transform: scale(0.98);
+}
+
+/* Bottom switch text */
+.switchText {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-body);
+}
+
+.link {
+  color: var(--link-default);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: var(--link-hover);
+}

@@ -1,0 +1,196 @@
+/* GENERAL RESET & BASE */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* HEADER */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4f46e5;
+  }
+  
+  .nav button,
+  .nav a {
+    margin-left: 1rem;
+    background: none;
+    border: none;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .nav button:hover,
+  .nav a:hover {
+    color: #4f46e5;
+  }
+  
+  /* DROPDOWN */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdownContent {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    padding: 0.5rem 0;
+    border-radius: 0.5rem;
+  }
+  
+  .dropdownContent a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .dropdownContent a:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .dropdown:hover .dropdownContent {
+    display: block;
+  }
+  
+  /* LOGIN FORM */
+  #login-form {
+    max-width: 400px;
+    background-color: white;
+    margin: 3rem auto;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+  
+  .inputGroup {
+    margin-bottom: 1.25rem;
+  }
+  
+  .inputLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #555;
+  }
+  
+  .inputField {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .forgotRow {
+    text-align: right;
+    margin-bottom: 1rem;
+  }
+  
+  .forgotBtn {
+    background: none;
+    border: none;
+    color: #4f46e5;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  
+  .authBtn {
+    width: 100%;
+    background-color: #4f46e5;
+    color: white;
+    padding: 0.6rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .authBtn:hover {
+    background-color: #4338ca;
+  }
+  
+  .switchLink {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .switchLink .link {
+    color: #4f46e5;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  /* PRODUCT LIST */
+  .productGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+  
+  .productCard {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  
+  .productCard:hover {
+    transform: translateY(-5px);
+  }
+  
+  .productCard img {
+    max-width: 100%;
+    border-radius: 0.5rem;
+  }
+  
+  .productCard h3 {
+    font-size: 1rem;
+    margin: 0.75rem 0 0.5rem;
+    color: #333;
+  }
+  
+  .productCard p {
+    color: #4f46e5;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+  }
+  
+  .productCard button {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .productCard button:hover {
+    background-color: #4338ca;
+  }
+  
