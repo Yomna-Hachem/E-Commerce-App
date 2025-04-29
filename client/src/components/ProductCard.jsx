@@ -1,25 +1,26 @@
 import React from 'react';
+import {Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import styles from '../styles/productCard.module.css';
 
 const ProductCard = ({ product }) => {
   const { addToCart, removeFromCart, cartItems, viewMode } = useCart();
 
-  const isInCart = cartItems.some(item => item.product_id === product.product_id);
+  //const isInCart = cartItems.some(item => item.product_id === product.product_id);
 
-  const handleClick = () => {
-    if (viewMode === 'cart') {
-      removeFromCart(product.product_id);
-    } else {
-      addToCart(product);
-    }
-  };
+  // const handleClick = () => {
+  //   if (viewMode === 'cart') {
+  //     removeFromCart(product.product_id);
+  //   } else {
+  //     addToCart(product);
+  //   }
+  // };
 
-  const buttonText = viewMode === 'cart'
-    ? 'Remove from Cart'
-    : isInCart
-      ? 'In Cart'
-      : 'Add to Cart';
+  // const buttonText = viewMode === 'cart'
+  //   ? 'Remove from Cart'
+  //   : isInCart
+  //     ? 'In Cart'
+  //     : 'Add to Cart';
 
   return (
     <div className={styles.productCard}>
@@ -29,12 +30,8 @@ const ProductCard = ({ product }) => {
       />
       <h3>{product.name}</h3>
       <p>${product.price}</p>
-      <button
-        onClick={handleClick}
-        disabled={viewMode !== 'cart' && isInCart}
-      >
-        {buttonText}
-      </button>
+
+      <Link to = {`/ProductDetails/${product.product_id}`}><button>View Item</button></Link>
     </div>
   );
 };

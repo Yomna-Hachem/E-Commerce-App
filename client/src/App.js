@@ -8,6 +8,7 @@ import { CartProvider } from './context/CartContext';
 import './App.css';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
+import ProductDetails from './components/ProductDetails';
 
 function App() {
 const [message, setMessage] = useState('');
@@ -34,6 +35,7 @@ const [error, setError] = useState(null);
         <Route path="/AuthContainer" element={<AuthContainer />} /> 
         <Route path="/Products" element={<ProductList />} /> 
         <Route path="/Cart" element={<Cart />} /> 
+        <Route path="/ProductDetails/:id" element={<ProductDetails />} />
       </Routes>
     </Router>
     </CartProvider>

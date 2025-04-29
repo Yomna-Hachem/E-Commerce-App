@@ -25,4 +25,3 @@ const pool = new Pool({
 
 // Export the pool so it can be used in other parts of your application
 module.exports = pool;
-

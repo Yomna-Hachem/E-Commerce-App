@@ -22,10 +22,8 @@ app.use(cors({
 
 
 app.get('/', (req, res) => res.send('Hello from the backend!'));
-
 app.use('/products', productRoutes);
 app.use('/auth',authRoutes)
-
 
 
 app.listen(PORT, () => {

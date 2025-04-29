@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
-  const { setViewMode } = useCart();
+  const {setViewMode } = useCart();
   const [error, setError] = useState(null);
 
   useEffect(() => {

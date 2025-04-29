@@ -7,11 +7,7 @@ function HomePage () {
   return (
     
     <div className={styles.container}>
-      
 
-      
-      <ProductList />
-      
     </div> 
 
   );
