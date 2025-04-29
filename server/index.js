@@ -11,9 +11,8 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => res.send('Hello from the backend!'));
-
 app.use('/products', productRoutes);
-app.use('/login',authRoutes)
+app.use('/auth',authRoutes);
 
 
 app.listen(PORT, () => {
