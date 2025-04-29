@@ -16,9 +16,10 @@ const ProductList = () => {
   useEffect(() => {
     // Fetch products from the backend
     fetch('http://localhost:5001/products')
+    
       .then((response) => response.json())
       .then((data) => {
-        setProducts(data);
+      setProducts(data);
       })
       .catch((err) => {
         console.error('Error fetching products:', err);

@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import Header from './components/Header'; 
 import AuthContainer from './pages/Authentication';
 import { CartProvider } from './context/CartContext';
+import { UserProvider } from './context/UserContext';
 import './App.css';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
@@ -27,9 +28,12 @@ const [error, setError] = useState(null);
         setError('Failed to fetch data');
       });
   }, []);
+  console.log("returning elements");
 
   return (
+    
     <CartProvider>
+    <UserProvider> 
     <Router>
       <Header/>
       <Routes>
@@ -41,6 +45,7 @@ const [error, setError] = useState(null);
         <Route path="/search" element={<SearchPage />} />
       </Routes>
     </Router>
+    </UserProvider> 
     </CartProvider>
   );
 }

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import styles from '../styles/Authentication.module.css';
+import { useUserContext } from '../context/UserContext';
 
 
 
 function LoginForm({ onSwitchForm }) {
   const [username, setUsername] = useState(''); // State for username
   const [password, setPassword] = useState(''); // State for password
+  const { setUserDetails } = useUserContext(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent form submission
@@ -27,6 +29,22 @@ function LoginForm({ onSwitchForm }) {
       });
       
       const data = await response.json();
+      console.log(data.user.profile_picture)
+
+      if (data.success) {
+        // Assuming the response returns user data (name, id, etc.)
+        setUserDetails({ 
+          user_id: data.user.user_id, 
+          first_name: data.user.first_name, 
+          last_name: data.user.last_name,
+          email: data.user.email,
+          role: data.user.role,
+          profile_picture: data.user.profile_picture,
+        });
+      } else {
+        // Handle login failure (e.g., show an error message)
+        console.error('Login failed');
+      }
 
       console.log(response.ok);
       if (response.ok) {
@@ -42,6 +60,7 @@ function LoginForm({ onSwitchForm }) {
       console.error('Error during login:', error);
       alert('An error occurred during login');
     }
+    
   };
 
   return (

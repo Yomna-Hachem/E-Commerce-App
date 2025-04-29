@@ -9,7 +9,7 @@ const loginUser = async (req, res) => {
 
   try {
     // 1. Check if user exists
-    const result = await pool.query('SELECT user_id, email, password_hash FROM users WHERE email = $1 LIMIT 1', [username]);
+    const result = await pool.query('SELECT user_id, first_name, last_name, email, profile_picture, password_hash FROM users WHERE email = $1 LIMIT 1', [username]);
     console.log(result.rowCount);
 
     if (result.rows.length === 0) {
@@ -91,7 +91,7 @@ const signUpUser = async (req, res) => {
 
     // 3. Insert new user (UUID will auto-generate)
 
-    const DEFAULT_PROFILE_PICTURE = 'client/public/images/defaultPP.jpg';
+    const DEFAULT_PROFILE_PICTURE = '/images/defaultPP.jpg';
     const newUser = await pool.query(
       `INSERT INTO users (
         first_name, 
