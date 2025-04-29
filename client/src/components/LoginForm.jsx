@@ -3,7 +3,7 @@ import styles from '../styles/Authentication.module.css';
 
 
 
-function LoginForm({ onSwitchForm, onForgotPassword }) {
+function LoginForm({ onSwitchForm }) {
   const [username, setUsername] = useState(''); // State for username
   const [password, setPassword] = useState(''); // State for password
 
@@ -14,15 +14,16 @@ function LoginForm({ onSwitchForm, onForgotPassword }) {
       username,
       password,
     };
-    console.log(JSON.stringify(loginData));
+
     try {
       // Send POST request to the backend authentication route  
-      const response = await fetch('http://localhost:5001/login', {
+      const response = await fetch('http://localhost:5001/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(loginData),
+        credentials: "include",
       });
       
       const data = await response.json();
