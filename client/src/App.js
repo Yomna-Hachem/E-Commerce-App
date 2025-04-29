@@ -9,6 +9,8 @@ import './App.css';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import ProductDetails from './components/ProductDetails';
+import SearchPage from './pages/SearchPage';
+
 
 function App() {
 const [message, setMessage] = useState('');
@@ -36,6 +38,7 @@ const [error, setError] = useState(null);
         <Route path="/Products" element={<ProductList />} /> 
         <Route path="/Cart" element={<Cart />} /> 
         <Route path="/ProductDetails/:id" element={<ProductDetails />} />
+        <Route path="/search" element={<SearchPage />} />
       </Routes>
     </Router>
     </CartProvider>
