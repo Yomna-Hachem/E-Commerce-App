@@ -58,15 +58,21 @@
   position: absolute;
   top: 2.5rem;
   left: 0;
+  right: 0;
   background-color: var(--bg-input);
   border-radius: 0.3rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   min-width: 160px;
   z-index: 10;
   flex-direction: column;
+  
+  
 }
 
-.dropdownContent a {
+
+
+.dropdownContent a
+{
   padding: 0.75rem 1rem;
   text-decoration: none;
   color: var(--text-body);
@@ -123,7 +129,24 @@
   box-shadow: 0 0 0 1px var(--link-default);
 }
 
+.profileButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* space between image and name */
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  color: inherit;
+}
 
+.profileImage {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 /* Responsive styles */
 @media (max-width: 768px) {
   .menuToggle {

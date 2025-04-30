@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../styles/Authentication.module.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignupForm({ onSwitchForm }) {
   const [firstName, setFirstName] = useState('');
@@ -8,6 +9,8 @@ export default function SignupForm({ onSwitchForm }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,8 +45,10 @@ export default function SignupForm({ onSwitchForm }) {
 
       if (response.ok) {
         localStorage.setItem('token', data.token);
-        alert('Signup successful!');
-        // You can redirect or change UI as needed
+        setErrorMessage(''); 
+        onSwitchForm()
+        
+
       } else {
         alert('Signup failed: ' + data.message);
       }

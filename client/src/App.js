@@ -1,16 +1,21 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // includes carousel, modal, etc.
+
 import HomePage from './pages/HomePage';
 import Header from './components/Header'; 
 import AuthContainer from './pages/Authentication';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
+import { ProductProvider } from './context/ProductContext';
 import './App.css';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import ProductDetails from './components/ProductDetails';
 import SearchPage from './pages/SearchPage';
+
 
 
 function App() {
@@ -34,6 +39,7 @@ const [error, setError] = useState(null);
     
     <CartProvider>
     <UserProvider> 
+    <ProductProvider>
     <Router>
       <Header/>
       <Routes>
@@ -45,6 +51,7 @@ const [error, setError] = useState(null);
         <Route path="/search" element={<SearchPage />} />
       </Routes>
     </Router>
+    </ProductProvider>
     </UserProvider> 
     </CartProvider>
   );

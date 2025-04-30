@@ -1,40 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import styles from '../styles/HomePage.module.css';
-import ProductCard from './ProductCard'; 
+import ProductCard from './ProductCard';
 import { useCart } from '../context/CartContext';
+import { useProducts } from '../context/ProductContext'; // Import the product context
+
 
 const ProductList = () => {
-  const [products, setProducts] = useState([]);
-  const {setViewMode } = useCart();
-  const [error, setError] = useState(null);
+  const { products, loading, error } = useProducts(); // Get products, loading, and error from context
+  const { setViewMode } = useCart();
 
   useEffect(() => {
     setViewMode('shop');
-  }, []);
+  }, [setViewMode]);
 
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const category = params.get('category');
 
-  useEffect(() => {
-    // Fetch products from the backend
-    fetch('http://localhost:5001/products')
-    
-      .then((response) => response.json())
-      .then((data) => {
-      setProducts(data);
-      })
-      .catch((err) => {
-        console.error('Error fetching products:', err);
-        setError('Failed to fetch products');
-      });
-  }, []);
+    // 🔍 Filter products by category if category exists in URL
+    const filteredProducts = category
+    ? products.filter(product =>
+        product.category?.toLowerCase() === category.toLowerCase()
+      )
+    : products;
+    console.log(filteredProducts);
+    console.log(products);
+
 
   return (
     <div className={styles.productGrid}>
       {error && <p>{error}</p>}
 
-      {products.length === 0 ? (
+      {loading ? (
         <p>Loading products...</p>
+      ) : filteredProducts.length === 0 ? (
+        <p>No products found for category "{category}"</p>
       ) : (
-        products.map((product) => (
+        filteredProducts.map((product) => (
           <ProductCard key={product.product_id} product={product} />
         ))
       )}

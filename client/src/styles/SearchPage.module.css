@@ -1,11 +1,20 @@
 .searchPage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-    background-color: var(--bg-offwhite);
-    font-family: var(--body-font);
-  }
+  display: flex;
+  justify-content: center;  /* centers horizontally */
+  align-items: flex-start;  /* aligns to the top vertically */
+  height: 80vh;
+  background-color: var(--bg-offwhite);
+  font-family: var(--body-font);
+  padding-top: 2rem; /* optional: adds space from the top */
+}
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
+  gap: 20px;
+  margin-top: 40px;
+  margin-left: 20px;
+
+}
   
   .searchForm {
     display: flex;
@@ -44,4 +53,5 @@
   .searchSubmit:hover {
     background-color: var(--btn-primary-bg-hover);
   }
+  
   

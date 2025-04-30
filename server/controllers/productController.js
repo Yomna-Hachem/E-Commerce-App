@@ -2,7 +2,7 @@ const pool = require('../db');
 
 const getAllProducts = async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM products');
+    const result = await pool.query('SELECT p.*, c.name as category FROM products p JOIN categories c ON p.category_id = c.category_id');
 
     res.json(result.rows);
   } catch (err) {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../styles/Authentication.module.css';
 import { useUserContext } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -8,6 +9,9 @@ function LoginForm({ onSwitchForm }) {
   const [username, setUsername] = useState(''); // State for username
   const [password, setPassword] = useState(''); // State for password
   const { setUserDetails } = useUserContext(); 
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent form submission
@@ -29,7 +33,6 @@ function LoginForm({ onSwitchForm }) {
       });
       
       const data = await response.json();
-      console.log(data.user.profile_picture)
 
       if (data.success) {
         // Assuming the response returns user data (name, id, etc.)
@@ -50,7 +53,8 @@ function LoginForm({ onSwitchForm }) {
       if (response.ok) {
         // Store the token in localStorage
         localStorage.setItem('token', data.token);
-        alert('Login successful!');
+        setErrorMessage(''); // clear error if it existed
+        navigate('/'); // ✅ Redirect to homepage
         // You can redirect the user or update the UI as needed
       } else {
         console.log("hi")
