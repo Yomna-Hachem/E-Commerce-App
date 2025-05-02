@@ -10,6 +10,7 @@ import AuthContainer from './pages/Authentication';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
 import { ProductProvider } from './context/ProductContext';
+import { CartDataProvider } from './context/CartDataContext';
 import './App.css';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
@@ -40,6 +41,7 @@ const [error, setError] = useState(null);
     <CartProvider>
     <UserProvider> 
     <ProductProvider>
+    <CartDataProvider>
     <Router>
       <Header/>
       <Routes>
@@ -50,10 +52,12 @@ const [error, setError] = useState(null);
         <Route path="/ProductDetails/:id" element={<ProductDetails />} />
         <Route path="/search" element={<SearchPage />} />
       </Routes>
-    </Router>
+    </Router> 
+    </CartDataProvider>
     </ProductProvider>
     </UserProvider> 
     </CartProvider>
+
   );
 }
 

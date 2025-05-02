@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 
 const app = express();
 const PORT = 5001;
@@ -24,6 +25,7 @@ app.use(cors({
 app.get('/', (req, res) => res.send('Hello from the backend!'));
 app.use('/products', productRoutes);
 app.use('/auth',authRoutes)
+app.use('/cart', cartRoutes);
 
 
 app.listen(PORT, () => {

@@ -2,38 +2,56 @@ import React, { useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import styles from '../styles/Cart.module.css';
 import ProductCard from './ProductCard'; // Import the ProductCard component
+import {useCartDataContext} from '../context/CartDataContext'; // Import the CartDataContext
+import CartItemCard from './cartItemCard'; // Import the CartItemCard component
+import { useProducts } from '../context/ProductContext'; // Import the product context
+import { useUserContext } from '../context/UserContext';
 
 function Cart() {
-  const { cartItems, emptyCart, setViewMode } = useCart();
+  const { cartData, setCartData } = useCartDataContext();
+  const { products, loading, error } = useProducts();
+  const { user, setUserDetails } = useUserContext();
 
   const handleCheckout = () => {
     alert('Proceeding to checkout...');
-    // Implement further checkout logic here
   };
 
   useEffect(() => {
-    setViewMode('cart'); // Set view mode to 'cart'
-  }, [setViewMode]);
+    //console.log('Cart component mounted or updated', cartData);
+  }, []);
+
+  // Check if products are still loading or if user is not yet ready
+  if (loading || !user) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading products: {error.message}</div>;
+  }
 
   return (
     <div className={styles.cart}>
       <h2>Your Cart</h2>
-      {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <>
-          <ul>
-            {/* Loop through each item in cartItems and render ProductCard */}
-            {cartItems.map((item, index) => (
-              <li key={index}>
-                <ProductCard product={item} /> {/* Pass each cart item to ProductCard */}
-              </li>
-            ))}
-          </ul>
-          <button onClick={handleCheckout}>Checkout</button>
-          <button onClick={emptyCart}>Empty Cart</button>
-        </>
-      )}
+      <>
+      <ul className={styles.cartList}>
+        {cartData.map((item, index) => {
+          // Find the full product info from products array
+          const product = products.find(prod => prod.product_id === item.product_id);
+
+          // If product not found (optional), you can skip or show a message
+          if (!product) return null;
+
+            return (
+            <li key={index}>
+              <CartItemCard CartItem={product} quantity={item.quantity} size={item.size} />
+            </li>
+            );
+        })}
+      </ul>
+
+        <button onClick={handleCheckout}>Checkout</button>
+        <button onClick={handleCheckout}>Empty Cart</button>
+      </>
     </div>
   );
 }

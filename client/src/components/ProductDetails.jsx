@@ -1,9 +1,15 @@
-import React, { use, useState, useEffect, } from 'react';
+import React, { use, useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from '../styles/ProductDetails.module.css';
 import ReviewCard from './ReviewCard'; 
+import { useUserContext } from '../context/UserContext';
+import { useCartDataContext } from '../context/CartDataContext';
+
+
+
 
 const ProductDetails = () => {
+  const { addToCart, isProcessing, stockMap } = useCartDataContext();  
   const { id } = useParams(); // <--- id from the URL /cart/:id
   const [selectedSize, setSelectedSize] = useState('');
   const [rating, setRating] = useState(0);
@@ -14,6 +20,10 @@ const ProductDetails = () => {
   const [stockInfo, setStock] = useState([]);
   const [reviewInfo, setReviewInfo] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const { user } = useUserContext(); 
+  const formRef = useRef(null);
+  
+
 
 
   const sizes = ['Small', 'Medium', 'Large', 'XLarge'];
@@ -32,23 +42,22 @@ const ProductDetails = () => {
       setError('product error');
     });
 
-  }, []);
+  }, [id]);
 
   //STOCK INFO
-  useEffect(() => { 
-    console.log('looking for sizes//,ghj,');// why does it get called twice?
-    fetch(`http://localhost:5001/products/stockInfo/${id}`)      
-    .then((response) => response.json())
-    .then((data) => {
-      setStock(data);
-      console.log('stock details:', data);
-    })
-    .catch((err) => {
-      console.error('Error fetching stocks:', err);
-      setError('stock error');
-    });
+  useEffect(() => {
+    console.log('looking for sizes//,ghj,'); // Logging statement for debugging
 
-  }, []);
+    // Check if the stockMap contains the information for the product id
+    if (stockMap) {
+      const stockk = stockMap.filter(item => item.product_id === id);
+      setStock(stockk);
+      console.log('stock details:', stockInfo);
+    } else {
+      setError('Stock info not found');
+    }
+
+  }, [id, stockMap]);
  
   //REVIEW INFO
   useEffect(() => { 
@@ -57,25 +66,91 @@ const ProductDetails = () => {
     .then((response) => response.json())
     .then((data) => {
       setReviewInfo(data);
-      console.log('stock details:', data);
+      console.log('review details:', data);
     })
     .catch((err) => {
       console.error('Error fetching stocks:', err);
       setError('stock error');
     });
 
-  }, []);
+  }, [id]);
 
+  useEffect(() => {
+    if (selectedSize) {
+      const stock = stockInfo.find(item =>
+        item.size?.toLowerCase() === selectedSize.toLowerCase()
+      );
+      const maxQty = stock?.quantity || 1;
+      setQuantity(prevQty => Math.min(prevQty, maxQty));
+    } else {
+      // Optional: reset to default if size is unselected
+      setQuantity(1);
+    }
+  }, [selectedSize, stockInfo]);
 
   const handleSizeSelect = (size) => setSelectedSize(size);
+
   const handleRatingClick = (star) => setRating(star);
+
+  const handleAddToCart = () => {
+    if (user && user.user_id) {
+      if (selectedSize) {
+        const cartItem = {
+        user_id: user.user_id,
+        product_id: id,
+        quantity: quantity,
+        size: selectedSize,
+        flag : 1
+      };
+      addToCart(cartItem);}
+      else {
+        alert('Please select a size before adding to cart.');
+      }
+    } else {
+      console.log('User not logged in. Cannot add to cart.');
+      alert('Please log in to add items to the cart.');
+    }
+  }
   const handleReviewSubmit = (e) => {
     e.preventDefault();
-    if (review.trim() && rating) {
+    if (review.trim()) {
       setReviews([...reviews, { rating, text: review }]);
       setReview('');
       setRating(0);
+    
+
+    if (user && user.user_id) {
+      //write to db
+      alert('Review submitted!');
+            fetch('http://localhost:5001/products/submitReview', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json', // Tell server you are sending JSON
+              },
+              body: JSON.stringify({
+                product_id: id,          // The product id you are reviewing
+                user_id: user.user_id,   // The current logged in user id
+                rating: rating,         // The star rating
+                comment: review         // The review text
+              })
+            })
+            .then(response => response.json())
+            .then(data => {
+              console.log('Review submitted successfully', data);
+              formRef.current.reset();
+
+            })
+            .catch(error => {
+              console.error('Error submitting review:', error);
+              formRef.current.reset();
+
+            });
+      
+    } else {
+      console.log('User not logged in. Cannot submit review.');
+      alert('Please log in to submit a review.');
     }
+  }
   };
 
   return (
@@ -88,6 +163,7 @@ const ProductDetails = () => {
         <div className={styles.productInfo}>
           <h2>{currentProduct.name}</h2>
           <h4>${currentProduct.price}</h4>
+          <h4>{user?.user_id ? user.user_id : 'Guest'}</h4>
 
 
           
@@ -121,6 +197,7 @@ const ProductDetails = () => {
             <button 
               onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
               className={styles.quantityButton}
+              disabled={!selectedSize || quantity <= 1}
             >
               -
             </button>
@@ -130,6 +207,14 @@ const ProductDetails = () => {
             <button 
               onClick={() => setQuantity(prev => prev + 1)}
               className={styles.quantityButton}
+              disabled={
+                !selectedSize ||
+                quantity >= (
+                  stockInfo.find(item =>
+                    item.size?.toLowerCase() === selectedSize.toLowerCase()
+                  )?.quantity || 1
+                )
+              }
             >
               +
             </button>
@@ -138,7 +223,8 @@ const ProductDetails = () => {
 
           <p>{currentProduct.description}</p>
 
-          <button className={styles.addToCart}>Add to Cart</button>
+          <button className={styles.addToCart} onClick={() => 
+            handleAddToCart()} disabled={isProcessing}>{isProcessing ? 'Adding...' : 'Add to Cart'}</button>
         </div>
       </div>
 
@@ -164,40 +250,18 @@ const ProductDetails = () => {
           ))}
         </div>
 
-        <form onSubmit={handleReviewSubmit} className={styles.reviewForm}>
+        <form onSubmit={handleReviewSubmit} className={styles.reviewForm} ref={formRef}>
           <textarea
             value={review}
             onChange={(e) => setReview(e.target.value)}
             rows="3"
             placeholder="Write your review..."
+            required
           />
           <button type="submit">Submit Review</button>
         </form>
 
-        {reviews.length ? (
-          reviews.map((item, idx) => (
-            <div key={idx} className={styles.singleReview}>
-              <div className={styles.starRating}>
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <svg
-                    key={star}
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill={star <= item.rating ? '#ffc107' : '#e4e5e9'}
-                      d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61
-                      L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-                    />
-                  </svg>
-                ))}
-              </div>
-              <p>{item.text}</p>
-            </div>
-          ))
-        ) : reviewInfo.length ? (
+        {reviewInfo.length > 0 ? (
           reviewInfo.map((review) => (
             <ReviewCard 
               key={review.review_id}

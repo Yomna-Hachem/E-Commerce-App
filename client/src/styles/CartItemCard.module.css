@@ -1,0 +1,63 @@
+.cartItemCard {
+    background-color: var(--bg-offwhite);
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--body-font);
+    color: var(--text-body);
+    transition: transform 0.3s ease;
+  }
+  
+  .cartItemCard:hover {
+    transform: translateY(-5px);
+  }
+  
+  .cartItemCard img {
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 1rem;
+  }
+  
+  .cartItemCard .info {
+    flex: 1;
+    text-align: left;
+  }
+  
+  .cartItemCard .info h3 {
+    font-family: var(--heading-font);
+    color: var(--text-heading);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cartItemCard .info p {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .cartItemCard .info .quantity, 
+  .cartItemCard .info .total-price {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  
+  .cartItemCard .remove-btn {
+    background-color: var(--btn-danger-bg);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: var(--body-font);
+    transition: background-color 0.3s ease;
+  }
+  
+  .cartItemCard .remove-btn:hover {
+    background-color: var(--btn-danger-bg-hover);
+  }
+  

@@ -30,7 +30,7 @@
   }
   
   .removeButton {
-    background-color: #ff4d4d;
+    background-color: var(--btn-primary-bg);;
     color: white;
     padding: 0.5rem;
     border: none;
