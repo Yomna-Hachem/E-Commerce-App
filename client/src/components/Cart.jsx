@@ -1,69 +1,103 @@
-import React, { useEffect } from 'react';
-import { useCart } from '../context/CartContext';
-import styles from '../styles/Cart.module.css';
-import ProductCard from './ProductCard'; // Import the ProductCard component
-import {useCartDataContext} from '../context/CartDataContext'; // Import the CartDataContext
-import CartItemCard from './cartItemCard'; // Import the CartItemCard component
-import { useProducts } from '../context/ProductContext'; // Import the product context
+import React, { useEffect, useState } from 'react';
+import { useCartDataContext } from '../context/CartDataContext';
+import { useProducts } from '../context/ProductContext';
 import { useUserContext } from '../context/UserContext';
+import CartItemCard from './cartItemCard';
+import styles from '../styles/Cart.module.css';
 
 function Cart() {
   const { cartData, setCartData, removeFromCart } = useCartDataContext();
   const { products, loading, error } = useProducts();
-  const { user, setUserDetails } = useUserContext();
+  const { user } = useUserContext();
+
+  const [showCheckoutPopup, setShowCheckoutPopup] = useState(false);
 
   const handleCheckout = () => {
-    alert('Proceeding to checkout...');
+    setShowCheckoutPopup(true); // Open modal
   };
 
   const handleEmptyCart = () => {
     if (window.confirm('Are you sure you want to empty your cart?')) {
-      
       cartData.forEach(item => {
-        // Use the removeFromCart function from CartContext
         removeFromCart(item.product_id, item.size);
       });
       setCartData([]);
       alert('Your cart has been emptied.');
     }
-  }
+  };
 
-  useEffect(() => {
-    //console.log('Cart component mounted or updated', cartData);
-  }, []);
+  const handleCancelCheckout = () => {
+    setShowCheckoutPopup(false); // Close modal
+  };
 
-  // Check if products are still loading or if user is not yet ready
-  if (loading || !user) {
-    return <div>Loading...</div>;
-  }
+  const handleConfirmCheckout = () => {
+    alert('Checked out!');
+    setShowCheckoutPopup(false);
+    // You can insert backend logic here later
+  };
 
-  if (error) {
-    return <div>Error loading products: {error.message}</div>;
-  }
+  const calculateTotal = () => {
+    return cartData.reduce((acc, item) => {
+      const product = products.find(prod => prod.product_id === item.product_id);
+      if (!product) return acc;
+      const price = parseFloat(product.price) || 0;
+      return acc + price * item.quantity;
+    }, 0);
+  };
+
+  if (loading || !user) return <div>Loading...</div>;
+  if (error) return <div>Error loading products: {error.message}</div>;
 
   return (
     <div className={styles.cart}>
       <h2>Your Cart</h2>
-      <>
+
       <ul className={styles.cartList}>
         {cartData.map((item, index) => {
-          // Find the full product info from products array
           const product = products.find(prod => prod.product_id === item.product_id);
-
-          // If product not found (optional), you can skip or show a message
           if (!product) return null;
-
-            return (
+          return (
             <li key={index}>
-              <CartItemCard CartItem={product} quantity={item.quantity} size={item.size} />
+              <CartItemCard
+                CartItem={product}
+                quantity={item.quantity}
+                size={item.size}
+                isCheckout={false}
+              />
             </li>
-            );
+          );
         })}
       </ul>
 
-        <button onClick={handleCheckout}>Checkout</button>
-        <button onClick={handleEmptyCart}>Empty Cart</button>
-      </>
+      <button onClick={handleCheckout}>Checkout</button>
+      <button onClick={handleEmptyCart}>Empty Cart</button>
+
+      {showCheckoutPopup && (
+        <div className={styles.popupOverlay}>
+          <div className={styles.popupContent}>
+            <h3>Confirm Your Order</h3>
+            <ul className={styles.cartList}>
+              {cartData.map((item, index) => {
+                const product = products.find(prod => prod.product_id === item.product_id);
+                if (!product) return null;
+                return (
+                  <li key={index}>
+                    <CartItemCard
+                      CartItem={product}
+                      quantity={item.quantity}
+                      size={item.size}
+                      isCheckout={true} // disable buttons in checkout mode
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+            <p><strong>Total:</strong> ${calculateTotal().toFixed(2)}</p>
+            <button onClick={handleConfirmCheckout}>Confirm</button>
+            <button onClick={handleCancelCheckout}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

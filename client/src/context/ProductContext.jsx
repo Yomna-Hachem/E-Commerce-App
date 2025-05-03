@@ -14,6 +14,7 @@ export const ProductProvider = ({ children }) => {
         const response = await fetch('http://localhost:5001/products'); // change as needed
         const data = await response.json();
         setProducts(data);
+        console.log(data)
         setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);

@@ -6,8 +6,6 @@ import { useUserContext } from '../context/UserContext';
 
 const Header = () => {
   const { user, setUserDetails } = useUserContext(); 
-  const [showSearchInput, setShowSearchInput] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -62,6 +60,7 @@ const Header = () => {
           <button>Cart</button>
         </Link>
 
+
         {user ? (
           <div className={styles.profileDropdown}>
           <div className={styles.dropdown}>
@@ -74,7 +73,7 @@ const Header = () => {
               {user.first_name}
             </button>
             <div className={styles.dropdownContent}>
-              <a href="#" onClick={handleNavItemClick}>View Profile</a>
+            <Link to="/profile">View Profile</Link>
               <a onClick={handleLogout}>Logout</a>
             </div>
           </div>
