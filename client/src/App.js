@@ -16,6 +16,7 @@ import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import ProductDetails from './components/ProductDetails';
 import SearchPage from './pages/SearchPage';
+import Profile from './components/Profile';
 
 
 
@@ -51,6 +52,7 @@ const [error, setError] = useState(null);
         <Route path="/Cart" element={<Cart />} /> 
         <Route path="/ProductDetails/:id" element={<ProductDetails />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router> 
     </CartDataProvider>
