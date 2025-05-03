@@ -8,13 +8,25 @@ import { useProducts } from '../context/ProductContext'; // Import the product c
 import { useUserContext } from '../context/UserContext';
 
 function Cart() {
-  const { cartData, setCartData } = useCartDataContext();
+  const { cartData, setCartData, removeFromCart } = useCartDataContext();
   const { products, loading, error } = useProducts();
   const { user, setUserDetails } = useUserContext();
 
   const handleCheckout = () => {
     alert('Proceeding to checkout...');
   };
+
+  const handleEmptyCart = () => {
+    if (window.confirm('Are you sure you want to empty your cart?')) {
+      
+      cartData.forEach(item => {
+        // Use the removeFromCart function from CartContext
+        removeFromCart(item.product_id, item.size);
+      });
+      setCartData([]);
+      alert('Your cart has been emptied.');
+    }
+  }
 
   useEffect(() => {
     //console.log('Cart component mounted or updated', cartData);
@@ -50,7 +62,7 @@ function Cart() {
       </ul>
 
         <button onClick={handleCheckout}>Checkout</button>
-        <button onClick={handleCheckout}>Empty Cart</button>
+        <button onClick={handleEmptyCart}>Empty Cart</button>
       </>
     </div>
   );
