@@ -1,17 +1,17 @@
-import React from "react";
-import "../styles/Alert.module.css";
+import React from 'react';
+import styles from '../styles/Alert.module.css'; // Import as styles
 
-const Alert = ({ message, show, onClose }) => {
+const AlertComponent = ({ message, show, onClose }) => {
   if (!show) return null;
 
   return (
-    <div className="alert-backdrop">
-      <div className="alert-box">
-        <p className="alert-message">{message}</p>
-        <button className="alert-button" onClick={onClose}>OK</button>
+    <div className={styles.alertBackdrop}>
+      <div className={styles.alertBox}>
+        <div className={styles.alertMessage}>{message}</div>
+        <button className={styles.alertButton} onClick={onClose}>Close</button>
       </div>
     </div>
   );
 };
 
-export default Alert;
+export default AlertComponent;

@@ -50,4 +50,14 @@ const removeFromCart = async (req, res) => {
     }
   }
 
-module.exports = {getCartData, addToCart, removeFromCart};
+  const placeOrder = async (req, res) => {
+    console.log('Placing order...');
+    const formData = req.body;
+    console.log('Form data:', formData);
+    res.json({
+      status: 'success',
+      message: 'Order received successfully!',
+    });
+  }
+
+module.exports = {getCartData, addToCart, removeFromCart, placeOrder};

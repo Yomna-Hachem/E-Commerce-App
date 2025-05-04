@@ -2,6 +2,8 @@ import React from 'react';
 import CartItemCard from './cartItemCard'; // Adjust path as needed
 import { useCartDataContext } from '../context/CartDataContext';
 import styles from '../styles/CheckoutPopup.module.css';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 const CheckoutPopup = ({ onClose, onConfirm }) => {
   const { cartDataItems } = useCartDataContext();
@@ -34,7 +36,9 @@ const CheckoutPopup = ({ onClose, onConfirm }) => {
         </div>
 
         <div className={styles.actions}>
-          <button onClick={onConfirm} className={styles.confirm}>Checkout</button>
+          <Link to="/order">
+          <button  className={styles.confirm}>Checkout</button>
+          </Link>
           <button onClick={onClose} className={styles.cancel}>Cancel</button>
         </div>
       </div>

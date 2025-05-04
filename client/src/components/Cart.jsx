@@ -4,6 +4,7 @@ import { useProducts } from '../context/ProductContext';
 import { useUserContext } from '../context/UserContext';
 import CartItemCard from './cartItemCard';
 import styles from '../styles/Cart.module.css';
+import { Link } from 'react-router-dom';
 
 function Cart() {
   const { cartData, setCartData, removeFromCart } = useCartDataContext();
@@ -93,7 +94,9 @@ function Cart() {
               })}
             </ul>
             <p><strong>Total:</strong> ${calculateTotal().toFixed(2)}</p>
+            <Link to="/order">
             <button onClick={handleConfirmCheckout}>Confirm</button>
+            </Link>
             <button onClick={handleCancelCheckout}>Cancel</button>
           </div>
         </div>

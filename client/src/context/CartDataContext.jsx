@@ -14,7 +14,6 @@ export const CartDataProvider = ({ children }) => {
     try {
       const response = await fetch('http://localhost:5001/products/stockInfo');
       const mapped = await response.json();
-      console.log('Stock data:', mapped);
       setStockMap(mapped);
     } catch (err) {
       console.error('Failed to fetch stock data:', err);

@@ -1,5 +1,4 @@
-
-.alert-backdrop {
+.alertBackdrop {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.3);
@@ -10,7 +9,7 @@
   font-family: 'Jost', sans-serif;
 }
 
-.alert-box {
+.alertBox {
   background-color: var(--bg-offwhite);
   padding: 24px 32px;
   border-radius: 12px;
@@ -20,13 +19,13 @@
   color: var(--text-heading);
 }
 
-.alert-message {
+.alertMessage {
   font-size: 16px;
   color: var(--text-body);
   margin-bottom: 20px;
 }
 
-.alert-button {
+.alertButton {
   padding: 10px 20px;
   background-color: var(--btn-primary-bg);
   color: var(--btn-primary-text);
@@ -39,6 +38,6 @@
   transition: background-color 0.2s ease;
 }
 
-.alert-button:hover {
+.alertButton:hover {
   background-color: var(--btn-primary-bg-hover);
 }

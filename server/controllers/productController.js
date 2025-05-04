@@ -29,7 +29,6 @@ const getStockInfo = async (req, res) => {
   try {
     const result = await pool.query('select product_id, size, quantity from product_stock');
     res.json(result.rows);
-    console.log('stock details:', result.rows);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -52,7 +51,6 @@ const getReviewsInfo = async (req, res) => {
 
 const submitReview = async (req, res) => {
   console.log('submit review called...9');
-  console.log('req.body:', req.body); // Log the request body to see what you're sending
   const { product_id, user_id, rating, comment } = req.body; // Assuming you're sending these in the request body
   try {
     const result = await pool.query('INSERT INTO reviews (product_id, user_id, rating, comment) VALUES ($1, $2, $3, $4)', [product_id, user_id, rating, comment]);
