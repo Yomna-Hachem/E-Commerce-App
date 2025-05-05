@@ -3,9 +3,10 @@ import { useCartDataContext } from '../context/CartDataContext';
 import { useUserContext } from '../context/UserContext';
 import { useProducts } from '../context/ProductContext';
 import styles from '../styles/PlaceOrder.module.css';
+import { Link } from 'react-router-dom';
 
 const PlaceOrder = () => {
-  const { cartData } = useCartDataContext();
+  const { cartData, setCartData, removeFromCart, fetchStockData } = useCartDataContext();
   const { user } = useUserContext();
   const { products } = useProducts();
 
@@ -18,9 +19,8 @@ const PlaceOrder = () => {
     address: '',
     apartment: '',
     city: '',
-    state: 'Giza',
+    state: 'Cairo',
     postal_code: '',
-    price : 0,
     marketingOptIn: true
   });
 
@@ -63,7 +63,8 @@ const PlaceOrder = () => {
 
 
 
-const handlePlaceOrder = async () => {
+const handlePlaceOrder = async (event) => {
+  event.preventDefault(); 
   const currentSubtotal = cartItemsWithProducts.reduce((sum, item) => {
     const price = parseFloat(item.price) || 0;
     const quantity = parseInt(item.quantity) || 0;
@@ -73,11 +74,14 @@ const handlePlaceOrder = async () => {
       setFormData(prev => ({
         ...prev,
         user_id: user?.user_id,
-        price: currentSubtotal
+
       }));
         const payload = {
             ...formData,
-            cartData: cartItemsWithProducts  // make sure it's fresh
+            cartData: cartItemsWithProducts,  // make sure it's fresh
+            payment_method: paymentMethod,
+            price: currentSubtotal
+
           };
         console.log('Placing order for user 🦮');
         const response = await fetch(`http://localhost:5001/cart/checkout`, {
@@ -87,14 +91,23 @@ const handlePlaceOrder = async () => {
             },
             body: JSON.stringify(payload),
         });
-        const data = await response.json();
-        console.log('Order placed successfully:', data);
+          const message = await response.json();
+          console.log('Order response:', message);
+            cartData.forEach(item => {
+            removeFromCart(item.product_id, item.size);
+          }
+        );
+          setCartData([]);
+          fetchStockData(); 
+          event.target.reset();
+      
     } catch (error) {
         console.error('Error placing order:', error);
     }
 };
 
   return (
+    <form className={styles.container} onSubmit={handlePlaceOrder}>
     <div className={styles.container}>
       <div className={styles.formSection}>
         <h2 className={styles.sectionHeading}>Contact</h2>
@@ -189,9 +202,38 @@ const handlePlaceOrder = async () => {
               value={formData.state}
               onChange={handleInputChange}
               className={styles.selectField}
+              required
             >
               <option value="Giza">Giza</option>
               <option value="Cairo">Cairo</option>
+              <option value="Alexandria">Alexandria</option>
+              <option value="Aswan">Aswan</option>
+              <option value="Asyut">Asyut</option>
+              <option value="Beheira">Beheira</option>
+              <option value="Beni Suef">Beni Suef</option>
+              <option value="Dakahlia">Dakahlia</option>
+              <option value="Damietta">Damietta</option>
+              <option value="Faiyum">Faiyum</option>
+              <option value="Gharbia">Gharbia</option>
+              <option value="Ismailia">Ismailia</option>
+              <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+              <option value="Luxor">Luxor</option>
+              <option value="Matrouh">Matrouh</option>
+              <option value="Minya">Minya</option>
+              <option value="Monufia">Monufia</option>
+              <option value="New Valley">New Valley</option>
+              <option value="North Sinai">North Sinai</option>
+              <option value="Port Said">Port Said</option>
+              <option value="Qalyubia">Qalyubia</option>
+              <option value="Qena">Qena</option>
+              <option value="Red Sea">Red Sea</option>
+              <option value="Sharqia">Sharqia</option>
+              <option value="Sohag">Sohag</option>
+              <option value="South Sinai">South Sinai</option>
+              <option value="Suez">Suez</option>
+              <option value="Helwan">Helwan</option>
+              <option value="6th of October">6th of October</option>
+
             </select>
           </div>
         </div>
@@ -214,7 +256,7 @@ const handlePlaceOrder = async () => {
             value={formData.telephone}
             onChange={handleInputChange}
             className={styles.inputField}
-            placeholder="telephone"
+            placeholder="Telephone"
             required
           />
         </div>
@@ -289,12 +331,14 @@ const handlePlaceOrder = async () => {
             Cash on Delivery
           </label>
         </div>
-
-        <button type="submit" className={styles.placeOrderButton} onClick={handlePlaceOrder}>
+          <Link to="/">
+        <button type="submit" className={styles.placeOrderButton} >
           Place Order
         </button>
+          </Link>
       </div>
     </div>
+    </form>
   );
 };
 

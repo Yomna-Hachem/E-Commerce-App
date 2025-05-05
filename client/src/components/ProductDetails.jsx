@@ -163,7 +163,6 @@ const ProductDetails = () => {
         <div className={styles.productInfo}>
           <h2>{currentProduct.name}</h2>
           <h4>${currentProduct.price}</h4>
-          <h4>{user?.user_id ? user.user_id : 'Guest'}</h4>
 
 
           

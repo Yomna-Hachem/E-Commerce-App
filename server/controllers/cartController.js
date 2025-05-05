@@ -126,19 +126,61 @@ const removeFromCart = async (req, res) => {
         item.size               // $8
       ]
     );
+
+    const setStock = await pool.query(
+      `
+        UPDATE product_stock
+        SET quantity = product_stock.quantity - $3
+        WHERE 
+          product_id = $1
+          AND size = $2
+        RETURNING quantity;
+        `,
+        [
+          item.product_id, // $1
+          item.size,        // $2
+          item.quantity
+        ]
+          );
+        
+      console.log('Updated stock quantity:');
     };
+
+    const paymentResults = await pool.query(
+      `
+      INSERT INTO "payments" (
+        "order_id",
+        "user_id",
+        "payment_method",
+        "amount_paid",
+        "payment_date"
+      ) VALUES (
+        $1, $2, $3, $4, NOW()
+      )
+      RETURNING "payment_id";
+      `,
+      [
+        order_id,        // $2
+        formData.user_id,         // $3
+        formData.payment_method,  // $4
+        formData.price,     // $5
+      ]
+    );
+    const payment_id = paymentResults.rows[0].payment_id;
+    console.log('Payment ID:', payment_id);
+    
+
 
     // commit 
     await pool.query('COMMIT');
     console.log('Transaction committed successfully!');
+    res.json({ message: 'Order placed successfully!' });
   }
   catch (err) {
     console.error(err.message);
-    //await pool.query('ROLLBACK');
+    await pool.query('ROLLBACK');
     res.status(500).send('Server Error');
   }
-
-
 
   }
 
