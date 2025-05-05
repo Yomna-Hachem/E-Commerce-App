@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, use } from 'react';
 import { useCartDataContext } from '../context/CartDataContext';
 import { useUserContext } from '../context/UserContext';
 import { useProducts } from '../context/ProductContext';
@@ -11,14 +11,16 @@ const PlaceOrder = () => {
 
   const [formData, setFormData] = useState({
     email: user?.email || '',
-    phone: '',
+    user_id: user?.user_id,
+    telephone: '',
     firstName: '',
     lastName: '',
     address: '',
     apartment: '',
     city: '',
-    governorate: 'Giza',
-    postalCode: '',
+    state: 'Giza',
+    postal_code: '',
+    price : 0,
     marketingOptIn: true
   });
 
@@ -62,11 +64,20 @@ const PlaceOrder = () => {
 
 
 const handlePlaceOrder = async () => {
-
+  const currentSubtotal = cartItemsWithProducts.reduce((sum, item) => {
+    const price = parseFloat(item.price) || 0;
+    const quantity = parseInt(item.quantity) || 0;
+    return sum + (price * quantity);
+  }, 0);
     try {
+      setFormData(prev => ({
+        ...prev,
+        user_id: user?.user_id,
+        price: currentSubtotal
+      }));
         const payload = {
             ...formData,
-            cartData: cartData  // make sure it's fresh
+            cartData: cartItemsWithProducts  // make sure it's fresh
           };
         console.log('Placing order for user 🦮');
         const response = await fetch(`http://localhost:5001/cart/checkout`, {
@@ -174,8 +185,8 @@ const handlePlaceOrder = async () => {
           </div>
           <div className={styles.inputGroup}>
             <select 
-              name="governorate"
-              value={formData.governorate}
+              name="state"
+              value={formData.state}
               onChange={handleInputChange}
               className={styles.selectField}
             >
@@ -188,8 +199,8 @@ const handlePlaceOrder = async () => {
         <div className={styles.inputGroup}>
           <input
             type="text"
-            name="postalCode"
-            value={formData.postalCode}
+            name="postal_code"
+            value={formData.postal_code}
             onChange={handleInputChange}
             className={styles.inputField}
             placeholder="Postal code (optional)"
@@ -199,11 +210,11 @@ const handlePlaceOrder = async () => {
         <div className={styles.inputGroup}>
           <input
             type="tel"
-            name="phone"
-            value={formData.phone}
+            name="telephone"
+            value={formData.telephone}
             onChange={handleInputChange}
             className={styles.inputField}
-            placeholder="Phone"
+            placeholder="telephone"
             required
           />
         </div>
