@@ -1,63 +1,108 @@
 .cartItemCard {
-    background-color: var(--bg-offwhite);
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-family: var(--body-font);
-    color: var(--text-body);
-    transition: transform 0.3s ease;
-  }
-  
-  .cartItemCard:hover {
-    transform: translateY(-5px);
-  }
-  
-  .cartItemCard img {
-    max-height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-right: 1rem;
-  }
-  
-  .cartItemCard .info {
-    flex: 1;
-    text-align: left;
-  }
-  
-  .cartItemCard .info h3 {
-    font-family: var(--heading-font);
-    color: var(--text-heading);
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .cartItemCard .info p {
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
-  }
-  
-  .cartItemCard .info .quantity, 
-  .cartItemCard .info .total-price {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-  }
-  
-  .cartItemCard .remove-btn {
-    background-color: var(--btn-danger-bg);
-    color: white;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    font-family: var(--body-font);
-    transition: background-color 0.3s ease;
-  }
-  
-  .cartItemCard .remove-btn:hover {
-    background-color: var(--btn-danger-bg-hover);
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  background-color: var(--bg-input);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  font-family: var(--body-font);
+}
+
+.cartItemCard img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Left section: image and info */
+.itemInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 2;
+}
+
+.itemText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.itemText h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text-heading);
+}
+
+.itemText p {
+  margin: 0;
+  color: var(--text-body);
+  font-size: 14px;
+}
+
+/* Middle section: quantity */
+.quantityContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.quantityButton {
+  padding: 6px 12px;
+  background-color: var(--btn-primary-bg);
+  border: none;
+  color: var(--btn-primary-text);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.quantityButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.quantityButton:hover:not(:disabled) {
+  background-color: var(--btn-primary-bg-hover);
+}
+
+.quantityValue {
+  font-size: 15px;
+  color: var(--text-heading);
+}
+
+/* Price section */
+.itemPrice {
+  flex: 1;
+  font-size: 15px;
+  color: var(--text-heading);
+  text-align: center;
+}
+
+/* Remove button */
+.itemAction {
+  flex: 1;
+  text-align: right;
+}
+
+.itemAction button {
+  padding: 6px 12px;
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s ease;
+}
+
+.itemAction button:hover {
+  background-color: var(--btn-primary-bg-hover);
+}

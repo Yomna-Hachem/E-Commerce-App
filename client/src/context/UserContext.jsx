@@ -1,30 +1,48 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const UserContext = createContext({
-  user: null,  // Default user value is null
-  setUserDetails: () => {}  // Default function to avoid undefined errors
+  user: null,
+  setUserDetails: () => {},
+  isLoading: true // Add loading state
 });
 
 export const useUserContext = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user data is saved in localStorage
-    const savedUser = JSON.parse(localStorage.getItem('user'));
-    if (savedUser) {
-      setUser(savedUser);  // Load saved user data
-    }
+    const loadUser = () => {
+      try {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+          const parsedUser = JSON.parse(savedUser);
+          setUser(parsedUser);
+        }
+      } catch (error) {
+        console.error('Failed to parse user data:', error);
+        // Clear corrupted data
+        localStorage.removeItem('user');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadUser();
   }, []);
 
   const setUserDetails = (userDetails) => {
-    setUser(userDetails);
-    localStorage.setItem('user', JSON.stringify(userDetails));  // Save user data to localStorage
+    try {
+      setUser(userDetails);
+      localStorage.setItem('user', JSON.stringify(userDetails));
+    } catch (error) {
+      console.error('Failed to save user data:', error);
+    }
   };
 
   return (
-    <UserContext.Provider value={{ user, setUserDetails }}>
+    <UserContext.Provider value={{ user, setUserDetails, isLoading }}>
       {children}
     </UserContext.Provider>
   );
