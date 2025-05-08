@@ -261,7 +261,7 @@ const handleImageClick = () => {
             <p><strong>Last Name:</strong> {user?.last_name}</p>
             <p><strong>Email:</strong> {user?.email}</p>
             <button className={styles.formButton} onClick={() => setIsEditing(true)}>Edit Information</button>
-            <button className={styles.formButton} onClick={() => navigate('../pages/myOrderPage')}>My Orders</button>
+            <button className={styles.formButton} onClick={() => navigate('/myOrderPage')}>My Orders</button>
           </>
         ) : (
           <>

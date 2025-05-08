@@ -18,7 +18,7 @@ const UserOrders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('http://localhost:5001//Myorders');
+        const response = await fetch('http://localhost:5001/myOrderPage');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

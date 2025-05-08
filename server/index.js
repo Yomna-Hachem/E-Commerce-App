@@ -9,7 +9,7 @@ const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
-
+const ordersRoutes = require('./routes/ordersRoutes')
 
 const app = express();
 const PORT = 5001;
@@ -29,6 +29,7 @@ app.use('/products', productRoutes);
 app.use('/auth',authRoutes)
 app.use('/cart', cartRoutes);
 app.use('/upload', uploadRoutes);
+app.use('/orders', ordersRoutes)
 
 app.listen(PORT, () => {
   console.log(`✅ Server is running on http://localhost:${PORT}`);
