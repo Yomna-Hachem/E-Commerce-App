@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useUserContext } from '../context/UserContext'; // Adjust path as needed
 import styles from '../styles/Profile.module.css';
 import Alert from './AlertComponent'; 
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const { user, setUserDetails } = useUserContext();
@@ -14,6 +15,7 @@ const Profile = () => {
   const [isPasswordUpdating, setIsPasswordUpdating] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -259,7 +261,7 @@ const handleImageClick = () => {
             <p><strong>Last Name:</strong> {user?.last_name}</p>
             <p><strong>Email:</strong> {user?.email}</p>
             <button className={styles.formButton} onClick={() => setIsEditing(true)}>Edit Information</button>
-            <button className={styles.formButton} onClick={() => alert('Redirect to My Orders page')}>My Orders</button>
+            <button className={styles.formButton} onClick={() => navigate('../pages/myOrderPage')}>My Orders</button>
           </>
         ) : (
           <>
