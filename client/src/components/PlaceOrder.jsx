@@ -3,27 +3,31 @@ import { useCartDataContext } from '../context/CartDataContext';
 import { useUserContext } from '../context/UserContext';
 import { useProducts } from '../context/ProductContext';
 import styles from '../styles/PlaceOrder.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const PlaceOrder = () => {
-  const { cartData } = useCartDataContext();
+  const { cartData, setCartData, removeFromCart, fetchStockData } = useCartDataContext();
   const { user } = useUserContext();
   const { products } = useProducts();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: user?.email || '',
-    phone: '',
+    user_id: user?.user_id,
+    telephone: '',
     firstName: '',
     lastName: '',
     address: '',
     apartment: '',
     city: '',
-    governorate: 'Giza',
-    postalCode: '',
+    state: 'Cairo',
+    postal_code: '',
     marketingOptIn: true
   });
 
   const [discountCode, setDiscountCode] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('credit_card');
+  const [beingPlaced, setBeingPlaced] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -59,231 +63,286 @@ const PlaceOrder = () => {
     };
   }, [cartItemsWithProducts]);
 
+  const handlePlaceOrder = async (event) => {
+    event.preventDefault(); 
+    setBeingPlaced(true);
 
-
-const handlePlaceOrder = async () => {
+    const currentSubtotal = cartItemsWithProducts.reduce((sum, item) => {
+      const price = parseFloat(item.price) || 0;
+      const quantity = parseInt(item.quantity) || 0;
+      return sum + (price * quantity);
+    }, 0);
 
     try {
-        const payload = {
-            ...formData,
-            cartData: cartData  // make sure it's fresh
-          };
-        console.log('Placing order for user 🦮');
-        const response = await fetch(`http://localhost:5001/cart/checkout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-        });
-        const data = await response.json();
-        console.log('Order placed successfully:', data);
+      const payload = {
+        ...formData,
+        user_id: user?.user_id,
+        cartData: cartItemsWithProducts,
+        payment_method: paymentMethod,
+        price: currentSubtotal
+      };
+
+      console.log('Placing order for user 🦮');
+
+      const response = await fetch(`http://localhost:5001/cart/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const message = await response.json();
+      console.log('Order response:', message);
+
+      cartData.forEach(item => {
+        removeFromCart(item.product_id, item.size);
+      });
+
+      setCartData([]);
+      fetchStockData();
+      navigate("/");
+
     } catch (error) {
-        console.error('Error placing order:', error);
+      console.error('Error placing order:', error);
+    } finally {
+      setBeingPlaced(false);
     }
-};
+  };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.formSection}>
-        <h2 className={styles.sectionHeading}>Contact</h2>
-        <div className={styles.inputGroup}>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            className={styles.inputField}
-            placeholder="Email"
-            required
-          />
-        </div>
-
-        <label className={styles.checkboxLabel}>
-          <input
-            type="checkbox"
-            name="marketingOptIn"
-            checked={formData.marketingOptIn}
-            onChange={handleInputChange}
-            className={styles.checkboxInput}
-          />
-          Email me with news and offers
-        </label>
-
-        <h2 className={styles.sectionHeading}>Delivery</h2>
-
-        <div className={styles.nameFields}>
+    <form className={styles.container} onSubmit={handlePlaceOrder}>
+      <div className={styles.container}>
+        <div className={styles.formSection}>
+          <h2 className={styles.sectionHeading}>Contact</h2>
           <div className={styles.inputGroup}>
             <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleInputChange}
               className={styles.inputField}
-              placeholder="First name"
+              placeholder="Email"
               required
             />
           </div>
-          <div className={styles.inputGroup}>
+
+          <label className={styles.checkboxLabel}>
             <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
+              type="checkbox"
+              name="marketingOptIn"
+              checked={formData.marketingOptIn}
               onChange={handleInputChange}
-              className={styles.inputField}
-              placeholder="Last name"
-              required
+              className={styles.checkboxInput}
             />
-          </div>
-        </div>
+            Email me with news and offers
+          </label>
 
-        <div className={styles.inputGroup}>
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            className={styles.inputField}
-            placeholder="Address"
-            required
-          />
-        </div>
+          <h2 className={styles.sectionHeading}>Delivery</h2>
 
-        <div className={styles.inputGroup}>
-          <input
-            type="text"
-            name="apartment"
-            value={formData.apartment}
-            onChange={handleInputChange}
-            className={styles.inputField}
-            placeholder="Apartment, suite, etc. (optional)"
-          />
-        </div>
-
-        <div className={styles.locationFields}>
-          <div className={styles.inputGroup}>
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              onChange={handleInputChange}
-              className={styles.inputField}
-              placeholder="City"
-              required
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <select 
-              name="governorate"
-              value={formData.governorate}
-              onChange={handleInputChange}
-              className={styles.selectField}
-            >
-              <option value="Giza">Giza</option>
-              <option value="Cairo">Cairo</option>
-            </select>
-          </div>
-        </div>
-
-        <div className={styles.inputGroup}>
-          <input
-            type="text"
-            name="postalCode"
-            value={formData.postalCode}
-            onChange={handleInputChange}
-            className={styles.inputField}
-            placeholder="Postal code (optional)"
-          />
-        </div>
-
-        <div className={styles.inputGroup}>
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            className={styles.inputField}
-            placeholder="Phone"
-            required
-          />
-        </div>
-      </div>
-
-      <div className={styles.summarySection}>
-        <h2 className={styles.sectionHeading}>Order Summary</h2>
-        <div className={styles.cartItems}>
-          {cartItemsWithProducts.map((item, index) => (
-            <div key={`${item.product_id}-${item.size}-${index}`} className={styles.cartItem}>
-              <span className={styles.itemQuantity}>{item.quantity}x</span>
-              <span className={styles.itemSize}>{item.size}</span>
-              <span className={styles.itemName}>{item.name}</span>
-              <span className={styles.itemPrice}>${(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2)}</span>
-              <div className={styles.itemDivider}></div>
+          <div className={styles.nameFields}>
+            <div className={styles.inputGroup}>
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                className={styles.inputField}
+                placeholder="First name"
+                required
+              />
             </div>
-          ))}
-        </div>
-
-        <div className={styles.discountGroup}>
-          <input
-            type="text"
-            placeholder="Discount code"
-            value={discountCode}
-            onChange={(e) => setDiscountCode(e.target.value)}
-            className={styles.discountInput}
-          />
-          <button type="button" className={styles.discountButton} >Apply</button>
-        </div>
-
-        <div className={styles.priceBreakdown}>
-          <div className={styles.priceRow}>
-            <span>Subtotal ({itemCount} {itemCount === 1 ? 'item' : 'items'})</span>
-            <span>${subtotal.toFixed(2)}</span>
+            <div className={styles.inputGroup}>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                className={styles.inputField}
+                placeholder="Last name"
+                required
+              />
+            </div>
           </div>
-          <div className={styles.priceRow}>
-            <span>Shipping</span>
-            <span>$0 FREE</span>
-          </div>
-          <div className={`${styles.priceRow} ${styles.totalRow}`}>
-            <span>Total</span>
-            <span>${total.toFixed(2)}</span>
-          </div>
-        </div>
 
-        <div className={styles.savingsNotice}>
-          TOTAL SAVINGS $95.00
-        </div>
-
-        <h2 className={styles.sectionHeading}>Payment Method</h2>
-        <div className={styles.paymentOptions}>
-          <label className={styles.paymentOption}>
+          <div className={styles.inputGroup}>
             <input
-              type="radio"
-              name="paymentMethod"
-              value="credit_card"
-              checked={paymentMethod === 'credit_card'}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-              className={styles.radioInput}
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              className={styles.inputField}
+              placeholder="Address"
+              required
             />
-            Credit Card
-          </label>
-          <label className={styles.paymentOption}>
+          </div>
+
+          <div className={styles.inputGroup}>
             <input
-              type="radio"
-              name="paymentMethod"
-              value="cash_on_delivery"
-              checked={paymentMethod === 'cash_on_delivery'}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-              className={styles.radioInput}
+              type="text"
+              name="apartment"
+              value={formData.apartment}
+              onChange={handleInputChange}
+              className={styles.inputField}
+              placeholder="Apartment, suite, etc. (optional)"
             />
-            Cash on Delivery
-          </label>
+          </div>
+
+          <div className={styles.locationFields}>
+            <div className={styles.inputGroup}>
+              <input
+                type="text"
+                name="city"
+                value={formData.city}
+                onChange={handleInputChange}
+                className={styles.inputField}
+                placeholder="City"
+                required
+              />
+            </div>
+            <div className={styles.inputGroup}>
+              <select 
+                name="state"
+                value={formData.state}
+                onChange={handleInputChange}
+                className={styles.selectField}
+                required
+              >
+                <option value="Giza">Giza</option>
+                <option value="Cairo">Cairo</option>
+                <option value="Alexandria">Alexandria</option>
+                <option value="Aswan">Aswan</option>
+                <option value="Asyut">Asyut</option>
+                <option value="Beheira">Beheira</option>
+                <option value="Beni Suef">Beni Suef</option>
+                <option value="Dakahlia">Dakahlia</option>
+                <option value="Damietta">Damietta</option>
+                <option value="Faiyum">Faiyum</option>
+                <option value="Gharbia">Gharbia</option>
+                <option value="Ismailia">Ismailia</option>
+                <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+                <option value="Luxor">Luxor</option>
+                <option value="Matrouh">Matrouh</option>
+                <option value="Minya">Minya</option>
+                <option value="Monufia">Monufia</option>
+                <option value="New Valley">New Valley</option>
+                <option value="North Sinai">North Sinai</option>
+                <option value="Port Said">Port Said</option>
+                <option value="Qalyubia">Qalyubia</option>
+                <option value="Qena">Qena</option>
+                <option value="Red Sea">Red Sea</option>
+                <option value="Sharqia">Sharqia</option>
+                <option value="Sohag">Sohag</option>
+                <option value="South Sinai">South Sinai</option>
+                <option value="Suez">Suez</option>
+                <option value="Helwan">Helwan</option>
+                <option value="6th of October">6th of October</option>
+              </select>
+            </div>
+          </div>
+
+          <div className={styles.inputGroup}>
+            <input
+              type="text"
+              name="postal_code"
+              value={formData.postal_code}
+              onChange={handleInputChange}
+              className={styles.inputField}
+              placeholder="Postal code (optional)"
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <input
+              type="tel"
+              name="telephone"
+              value={formData.telephone}
+              onChange={handleInputChange}
+              className={styles.inputField}
+              placeholder="Telephone"
+              required
+            />
+          </div>
         </div>
 
-        <button type="submit" className={styles.placeOrderButton} onClick={handlePlaceOrder}>
-          Place Order
-        </button>
+        <div className={styles.summarySection}>
+          <h2 className={styles.sectionHeading}>Order Summary</h2>
+          <div className={styles.cartItems}>
+            {cartItemsWithProducts.map((item, index) => (
+              <div key={`${item.product_id}-${item.size}-${index}`} className={styles.cartItem}>
+                <span className={styles.itemQuantity}>{item.quantity}x</span>
+                <span className={styles.itemSize}>{item.size}</span>
+                <span className={styles.itemName}>{item.name}</span>
+                <span className={styles.itemPrice}>${(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2)}</span>
+                <div className={styles.itemDivider}></div>
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.discountGroup}>
+            <input
+              type="text"
+              placeholder="Discount code"
+              value={discountCode}
+              onChange={(e) => setDiscountCode(e.target.value)}
+              className={styles.discountInput}
+            />
+            <button type="button" className={styles.discountButton}>Apply</button>
+          </div>
+
+          <div className={styles.priceBreakdown}>
+            <div className={styles.priceRow}>
+              <span>Subtotal ({itemCount} {itemCount === 1 ? 'item' : 'items'})</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div className={styles.priceRow}>
+              <span>Shipping</span>
+              <span>$0 FREE</span>
+            </div>
+            <div className={`${styles.priceRow} ${styles.totalRow}`}>
+              <span>Total</span>
+              <span>${total.toFixed(2)}</span>
+            </div>
+          </div>
+
+          <div className={styles.savingsNotice}>
+            TOTAL SAVINGS $95.00
+          </div>
+
+          <h2 className={styles.sectionHeading}>Payment Method</h2>
+          <div className={styles.paymentOptions}>
+            <label className={styles.paymentOption}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="credit_card"
+                checked={paymentMethod === 'credit_card'}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                className={styles.radioInput}
+              />
+              Credit Card
+            </label>
+            <label className={styles.paymentOption}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="cash_on_delivery"
+                checked={paymentMethod === 'cash_on_delivery'}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                className={styles.radioInput}
+              />
+              Cash on Delivery
+            </label>
+          </div>
+
+          <button 
+            type="submit" 
+            className={`${styles.placeOrderButton} ${beingPlaced ? styles.disabledButton : ''}`} 
+            disabled={beingPlaced}
+          >
+            {beingPlaced ? 'Processing...' : 'Place Order'}
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
   );
 };
 

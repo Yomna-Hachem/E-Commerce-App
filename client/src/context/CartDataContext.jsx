@@ -130,7 +130,8 @@ export const CartDataProvider = ({ children }) => {
       addToCart, 
       removeFromCart ,
       isProcessing ,
-      stockMap
+      stockMap,
+      fetchStockData
     }}>
       {children}
     </CartDataContext.Provider>

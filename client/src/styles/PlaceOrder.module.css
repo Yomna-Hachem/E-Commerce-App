@@ -225,3 +225,11 @@
   justify-self: end;
   font-weight: 500;
 }
+
+.placeOrderButton:disabled {
+  cursor: not-allowed;
+}
+
+.disabledButton {
+  background-color: grey !important;
+}
