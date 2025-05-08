@@ -8,6 +8,7 @@ require('dotenv').config();
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const adminRoutes = require('./routes/adminRoutes'); // Import admin routes
 
 const app = express();
 const PORT = 5001;
@@ -26,6 +27,7 @@ app.get('/', (req, res) => res.send('Hello from the backend!'));
 app.use('/products', productRoutes);
 app.use('/auth',authRoutes)
 app.use('/cart', cartRoutes);
+app.use('/admin', adminRoutes); // Add this line to include admin routes
 
 
 app.listen(PORT, () => {

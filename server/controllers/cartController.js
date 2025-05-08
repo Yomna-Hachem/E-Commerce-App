@@ -170,8 +170,6 @@ const removeFromCart = async (req, res) => {
     console.log('Payment ID:', payment_id);
     
 
-
-    // commit 
     await pool.query('COMMIT');
     console.log('Transaction committed successfully!');
     res.json({ message: 'Order placed successfully!' });

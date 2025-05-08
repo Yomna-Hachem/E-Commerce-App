@@ -162,6 +162,7 @@ const ProductDetails = () => {
 
         <div className={styles.productInfo}>
           <h2>{currentProduct.name}</h2>
+          <h3>Welcome, {user ? user.email : 'Guest'}!</h3>
           <h4>${currentProduct.price}</h4>
 
 
