@@ -6,6 +6,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // includes carousel, modal,
 
 import HomePage from './pages/HomePage';
 import Header from './components/Header'; 
+import Footer from './components/Footer';
 import AuthContainer from './pages/Authentication';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
@@ -19,6 +20,7 @@ import SearchPage from './pages/SearchPage';
 import Profile from './components/Profile';
 import PlaceOrder from './components/PlaceOrder';
 import UserOrders from './pages/myOrderPage';
+import AdminMainPage from './pages/AdminMainPage'; // Import the AdminMainPage component
 
 
 
@@ -57,7 +59,10 @@ const [error, setError] = useState(null);
         <Route path="/profile" element={<Profile />} />
         <Route path="/order" element={<PlaceOrder />} />
         <Route path="/myOrderPage" element={<UserOrders />} />
+        <Route path="/unauthorized" element={<h1>Unauthorized</h1>} />
+        <Route path="/admin" element={<AdminMainPage />} />
       </Routes>
+      <Footer />
     </Router> 
     </CartDataProvider>
     </ProductProvider>

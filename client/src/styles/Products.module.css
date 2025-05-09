@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap');
+
+.container {
+  padding: 1rem;
+  font-family: var(--body-font, 'Jost', sans-serif);
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.productCard {
+  background-color: var(--bg-input, #ffffff);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.productCard h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: var(--text-heading, #1f1f1f);
+  font-family: var(--heading-font, 'Marcellus', serif);
+}
+
+.productCard p {
+  margin: 0.25rem 0;
+  color: var(--text-body, #505050);
+}
+
+.productCard button {
+  margin-top: auto;
+  padding: 0.5rem 1rem;
+  background-color: var(--btn-primary-bg, #b4cb6d);
+  color: var(--btn-primary-text, white);
+  border: 2px solid var(--btn-primary-bg, #b4cb6d);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s, color 0.3s;
+  font-family: var(--body-font, 'Jost', sans-serif);
+  width: 100%;
+}
+
+.productCard button:hover {
+  background-color: var(--btn-primary-bg-hover, #7a7e6e);
+  color: var(--btn-primary-text, white);
+  border-color: var(--btn-primary-bg-hover, #7a7e6e);
+}
+
+.floatingButton {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: var(--btn-primary-bg, #b4cb6d);
+  color: var(--btn-primary-text, white);
+  border: none;
+  width: 50px;
+  height: 50px;
+  font-size: 2rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-family: var(--body-font, 'Jost', sans-serif);
+}
+
+.floatingButton:hover {
+  background-color: var(--btn-primary-bg-hover, #7a7e6e);
+}
+
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup {
+  background-color: var(--bg-input, #ffffff);
+  padding: 2rem;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: var(--body-font, 'Jost', sans-serif);
+}
+
+.popup h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  color: var(--text-heading, #1f1f1f);
+  font-family: var(--heading-font, 'Marcellus', serif);
+}
+
+.stockRow {
+  display: grid;
+  grid-template-columns: 1fr 50px 60px 50px;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-light, #dcdcdc);
+}
+
+.stockRow span {
+  font-size: 1rem;
+  color: var(--text-body, #505050);
+}
+
+.stockRow input {
+  width: 100%;
+  text-align: center;
+  padding: 0.25rem;
+  border: 1px solid var(--border-light, #dcdcdc);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: var(--body-font, 'Jost', sans-serif);
+  appearance: none; 
+}
+
+.stockRow button {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--bg-input, #ffffff);
+  border: 1px solid var(--text-body, #505050);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--text-heading, #1f1f1f);
+  transition: background-color 0.3s;
+  font-family: var(--body-font, 'Jost', sans-serif);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stockRow button:hover {
+  background-color: var(--btn-primary-bg-hover, #7a7e6e);
+  color: var(--btn-primary-text, white);
+}
+
+.popupActions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.popupActions button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s, color 0.3s;
+  font-family: var(--body-font, 'Jost', sans-serif);
+  width: 48%;
+}
+
+.popupActions button:first-child {
+  background-color: var(--btn-primary-bg, #b4cb6d);
+  color: var(--btn-primary-text, white);
+  border: none;
+}
+
+.popupActions button:first-child:hover {
+  background-color: var(--btn-primary-bg-hover, #7a7e6e);
+}
+
+.popupActions button:last-child {
+  background-color: transparent;
+  color: var(--text-heading, #1f1f1f);
+  border: 2px solid var(--text-heading, #1f1f1f);
+}
+
+.popupActions button:last-child:hover {
+  background-color: var(--text-heading, #1f1f1f);
+  color: var(--btn-primary-text, white);
+}
+
+.productCard .lowStockWarning {
+  color: #d32f2f ; /* Red color for warning */
+  font-weight: bold;
+  margin: 8px 0;
+  font-size: 0.9em;
+}

@@ -5,7 +5,18 @@ import ConfirmationComponent from '../components/confirmationComponent';
 
 const OrderProgress = ({ status }) => {
   const progressStages = ['placed', 'shipped', 'outForDelivery', 'delivered'];
-  const noProgressStatuses = ['cancelled', 'Refunded', 'RefundRejected', 'refundPending'];
+  const noProgressStatuses = ['Refunded', 'RefundRejected', 'refundPending'];
+
+  if (status === 'cancelled') {
+    return (
+      <ProgressBar
+        now={100}
+        label="Cancelled"
+        variant="danger"
+        className={styles.cancelledProgress}
+      />
+    );
+  }
 
   if (noProgressStatuses.includes(status)) {
     return null;
@@ -131,6 +142,19 @@ const UserOrders = () => {
               Cancel Order
             </Button>
           )}
+          
+          {/* Always show cancel button but disabled for non-cancellable statuses */}
+          {order.status !== 'placed' && order.status !== 'delivered' && (
+            <Button 
+              variant="danger" 
+              disabled 
+              className={styles.cancelBtnDisabled}
+            >
+              {order.status === 'cancelled' ? 'Order Cancelled' : 'Cancel Order'}
+            </Button>
+          )}
+  
+          {/* Rest of your action buttons... */}
           {['delivered', 'refundPending', 'Refunded', 'RefundRejected'].includes(order.status) && (
             <Button
               variant={order.status === 'RefundRejected' ? 'danger' : 'primary'}
@@ -150,12 +174,6 @@ const UserOrders = () => {
               {order.status === 'refundPending' && 'Refund Pending'}
               {order.status === 'Refunded' && 'Refunded'}
               {order.status === 'RefundRejected' && 'Refund Rejected'}
-            </Button>
-          )}
-
-          {(order.status !== 'placed' && order.status !== 'delivered') && (
-            <Button variant="danger" disabled className={styles.cancelBtn}>
-              Cancel Order
             </Button>
           )}
         </div>

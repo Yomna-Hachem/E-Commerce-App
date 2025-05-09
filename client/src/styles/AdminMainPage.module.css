@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap');
+
+:root {
+  --bg-offwhite:           #f2f2ef;
+  --bg-input:              #ffffff;
+  --border-light:          #dcdcdc;
+  --text-heading:          #1f1f1f;
+  --text-body:             #505050;
+  --btn-primary-bg:        #b4cb6d;
+  --btn-primary-bg-hover:  #7a7e6e;
+  --btn-primary-text:      white;
+
+  --body-font:    'Jost', sans-serif;
+  --heading-font: 'Marcellus', serif;
+}
+
+.adminContainer {
+  font-family: var(--body-font);
+  color: var(--text-body);
+  background-color: var(--bg-offwhite);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.topHeader {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--heading-font);
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.userInfo {
+  font-family: var(--body-font);
+  font-size: 1rem;
+}
+
+.layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  background-color: var(--bg-input);
+  width: 220px;
+  padding: 2rem 1rem;
+  border-right: 1px solid var(--border-light);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin-bottom: 1.2rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.sidebar li:hover {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-radius: 4px;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.mainContent h2 {
+  font-family: var(--heading-font);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.widgets {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.widget {
+  flex: 1 1 calc(25% - 1rem);
+  background-color: var(--btn-primary-bg-hover);
+  color: var(--btn-primary-text);
+  padding: 1rem;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  transition: transform 0.2s ease;
+}
+
+.widget:hover {
+  transform: translateY(-2px);
+}

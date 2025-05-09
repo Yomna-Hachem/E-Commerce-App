@@ -158,3 +158,32 @@
   margin: 0 10px;
   font-size: 18px;
 }
+
+
+.priceContainer {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.originalPrice {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 1.1rem;
+}
+
+.discountedPrice {
+  color: #d32f2f;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.discountBadge {
+  background-color: #d32f2f;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  margin-left: 8px;
+}

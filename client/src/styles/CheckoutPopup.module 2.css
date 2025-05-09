@@ -1,0 +1,58 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup {
+    background: white;
+    padding: 2rem;
+    max-height: 90vh;
+    width: 90%;
+    max-width: 800px;
+    overflow-y: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  }
+  
+  .itemsContainer {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  
+  .totalSection {
+    margin-top: 1rem;
+    text-align: right;
+  }
+  
+  .actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+  
+  .confirm {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cancel {
+    background-color: #ccc;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

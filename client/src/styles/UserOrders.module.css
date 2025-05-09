@@ -1,3 +1,5 @@
+/* UserOrders.module.css */
+
 .userOrders {
   font-family: var(--body-font);
   color: var(--text-body);
@@ -57,17 +59,18 @@
   color: var(--text-heading);
 }
 
+/* Progress Bars */
 .orderProgress {
   margin: 1.5rem 0;
-  height: 20px;
-  border-radius: 10px;
+  height: 24px;
+  border-radius: 12px;
   overflow: hidden;
   background-color: #f0f0f0;
 }
 
 .orderProgress .progress-bar {
   background-color: var(--btn-primary-bg);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   text-transform: capitalize;
   display: flex;
   align-items: center;
@@ -77,40 +80,76 @@
   letter-spacing: 0.5px;
 }
 
-.orderActions {
-  margin-top: 1.5rem;
-  display: flex;
-  gap: 1rem;
+.cancelledProgress {
+  margin: 1.5rem 0;
+  height: 24px;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.cancelBtn,
-.actionBtn {
-  border: none;
-  font-family: var(--body-font);
+.cancelledProgress .progress-bar {
+  background-color: var(--btn-danger-bg);
+  font-size: 0.9rem;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: all 0.2s;
+}
+
+/* Action Buttons */
+.orderActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .cancelBtn {
-  background-color: var(--btn-danger-bg);
+  background-color: var(--btn-primary-bg) !important;
+  border: 1px solid var(--btn-danger-bg) !important;
+  color: white !important;
+  font-weight: 500;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-block !important; /* Ensures button is always visible */
 }
 
-.cancelBtn:hover:not(:disabled) {
-  background-color: var(--btn-danger-bg-hover);
+.cancelBtn:hover {
+  background-color: var(--btn-primary-bg-hover) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cancelBtnDisabled {
+  background-color: #f8f9fa !important;
+  border: 1px solid #ddd !important;
+  color: #6c757d !important;
+  font-weight: 500;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  cursor: not-allowed;
+  opacity: 0.8;
+  display: inline-block !important;
 }
 
 .actionBtn {
   background-color: var(--btn-primary-bg);
+  border: none;
+  font-family: var(--body-font);
+  font-weight: 500;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  transition: all 0.2s;
 }
 
 .actionBtn:hover:not(:disabled) {
   background-color: var(--btn-primary-bg-hover);
 }
 
-.cancelBtn:disabled,
 .actionBtn:disabled {
   background-color: #e9ecef !important;
   color: #6c757d !important;
@@ -134,6 +173,7 @@
   background-color: #c82333 !important;
 }
 
+/* Order Details */
 .orderSummary {
   padding: 1rem 0;
   border-bottom: 1px solid var(--border-light);
@@ -182,6 +222,7 @@
   margin: 0.2rem 0;
 }
 
+/* Accordion Styles */
 .accordion-button {
   font-family: var(--body-font);
   font-weight: 500;
@@ -202,6 +243,7 @@
   border: 1px solid var(--border-light);
 }
 
+/* Modal Styles */
 .refundModal {
   font-family: var(--body-font);
 }
@@ -223,6 +265,9 @@
 .modalFooter {
   border-top: 1px solid var(--border-light);
   padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
 }
 
 .reasonInput {
@@ -237,6 +282,9 @@
 .modalCancelBtn {
   background-color: #6c757d;
   border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  color: white;
 }
 
 .modalCancelBtn:hover {
@@ -246,12 +294,16 @@
 .modalSubmitBtn {
   background-color: var(--btn-primary-bg);
   border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  color: white;
 }
 
 .modalSubmitBtn:hover {
   background-color: var(--btn-primary-bg-hover);
 }
 
+/* Responsive Styles */
 @media (max-width: 768px) {
   .orderMeta {
     flex-direction: column;
@@ -267,5 +319,17 @@
     width: 100%;
     height: auto;
     max-height: 200px;
+  }
+
+  .orderActions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cancelBtn,
+  .cancelBtnDisabled,
+  .actionBtn {
+    width: 100%;
+    text-align: center;
   }
 }

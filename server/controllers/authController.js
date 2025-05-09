@@ -9,7 +9,7 @@ const loginUser = async (req, res) => {
 
   try {
     // 1. Check if user exists
-    const result = await pool.query('SELECT user_id, first_name, last_name, email, profile_picture, password_hash FROM users WHERE email = $1 LIMIT 1', [username]);
+    const result = await pool.query('SELECT user_id, first_name, last_name, email, profile_picture, password_hash, role FROM users WHERE email = $1 LIMIT 1', [username]);
     console.log(result.rowCount);
 
     if (result.rows.length === 0) {
@@ -18,6 +18,7 @@ const loginUser = async (req, res) => {
 
     const user = result.rows[0];
     console.log(result.rows[0]);
+    console.log("😂😂😂");
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
 
@@ -29,7 +30,7 @@ const loginUser = async (req, res) => {
 
     }
     // 3. Generate JWT token
-    const token = generateToken({ userId: user.user_id }); 
+    const token = generateToken({ userId: user.user_id, role: user.role }); 
 
     // 4. Remove sensitive data before sending response
     delete user.password_hash;
