@@ -4,11 +4,13 @@ import styles from '../styles/ProductDetails.module.css';
 import ReviewCard from './ReviewCard'; 
 import { useUserContext } from '../context/UserContext';
 import { useCartDataContext } from '../context/CartDataContext';
+import { useProducts } from '../context/ProductContext'; // Assuming you have a ProductContext to get products
 
 
 
 
 const ProductDetails = () => {
+  const { products , loading} = useProducts(); // Assuming you have a hook to get products
   const { addToCart, isProcessing, stockMap } = useCartDataContext();  
   const { id } = useParams(); // <--- id from the URL /cart/:id
   const [selectedSize, setSelectedSize] = useState('');
@@ -29,20 +31,21 @@ const ProductDetails = () => {
   const sizes = ['Small', 'Medium', 'Large', 'XLarge'];
 
   useEffect(() => {
+    if (loading) return; // Avoid running if loading is true
     // Fetch product details from the backend using ProductId
-    console.log('Fetching product details for ID');
-    fetch(`http://localhost:5001/products/productDetails/${id}`)      
-    .then((response) => response.json())
-    .then((data) => {
-      setProducts(data);
-      console.log('Product details:', data);
-    })
-    .catch((err) => {
-      console.error('Error fetching product:', err);
-      setError('product error');
-    });
 
-  }, [id]);
+    console.log(products)
+    const product = products.find((item) => item.product_id == id);  // Find the product by ID
+
+    if (product) {
+      setProducts(product);  // Set the found product to state
+      console.log('Product details:', product);
+    } else {
+      setError('Product not found');  // Handle error if product not found
+      console.error('Product not found');
+    }
+
+  }, [id, loading]);
 
   //STOCK INFO
   useEffect(() => {
@@ -153,6 +156,8 @@ const ProductDetails = () => {
   }
   };
 
+  if (loading) return <div>Loading...</div>;
+
   return (
     <div className={styles.productDetails}>
       <div className={styles.productLayout}>
@@ -161,10 +166,23 @@ const ProductDetails = () => {
         </div>
 
         <div className={styles.productInfo}>
-          <h2>{currentProduct.name}</h2>
-          <h3>Welcome, {user ? user.email : 'Guest'}!</h3>
-          <h4>${currentProduct.price}</h4>
-
+  <h2>{currentProduct.name}</h2>
+  
+  {currentProduct.discount > 0 ? (
+    <div className={styles.priceContainer}>
+      <span className={styles.originalPrice}>
+        ${(currentProduct.price / (1 - currentProduct.discount / 100)).toFixed(2)}
+      </span>
+      <span className={styles.discountedPrice}>
+        ${currentProduct.price}
+      </span>
+      <span className={styles.discountBadge}>
+        {currentProduct.discount}% OFF
+      </span>
+    </div>
+  ) : (
+    <h4>${currentProduct.price}</h4>
+  )}
 
           
           <div className={styles.sizeSelector}>

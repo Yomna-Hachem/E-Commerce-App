@@ -131,7 +131,8 @@ export const CartDataProvider = ({ children }) => {
       removeFromCart ,
       isProcessing ,
       stockMap,
-      fetchStockData
+      fetchStockData,
+      setStockMap
     }}>
       {children}
     </CartDataContext.Provider>

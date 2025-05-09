@@ -1,5 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap');
 
+:root {
+  --bg-offwhite:           #f2f2ef;
+  --bg-input:              #ffffff;
+  --border-light:          #dcdcdc;
+  --text-heading:          #1f1f1f;
+  --text-body:             #505050;
+  --btn-primary-bg:        #b4cb6d;
+  --btn-primary-bg-hover:  #7a7e6e;
+  --btn-primary-text:      white;
+
+  --body-font:    'Jost', sans-serif;
+  --heading-font: 'Marcellus', serif;
+}
+
 .adminContainer {
   font-family: var(--body-font);
   color: var(--text-body);
@@ -12,63 +26,86 @@
 .topHeader {
   background-color: var(--btn-primary-bg);
   color: var(--btn-primary-text);
-  padding: 1rem;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: var(--heading-font);
 }
 
 .logo {
-  font-family: var(--heading-font);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.userInfo {
+  font-family: var(--body-font);
+  font-size: 1rem;
 }
 
 .layout {
   display: flex;
   flex: 1;
+  overflow: hidden;
 }
 
 .sidebar {
   background-color: var(--bg-input);
-  padding: 1rem;
-  width: 250px;
+  width: 220px;
+  padding: 2rem 1rem;
   border-right: 1px solid var(--border-light);
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .sidebar li {
-  margin: 1rem 0;
+  margin-bottom: 1.2rem;
+  padding: 0.5rem;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
 }
 
 .sidebar li:hover {
-  color: var(--btn-primary-bg);
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-radius: 4px;
 }
 
 .mainContent {
   flex: 1;
-  padding: 1rem;
+  padding: 2rem;
+  overflow-y: auto;
 }
 
 .mainContent h2 {
   font-family: var(--heading-font);
+  font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
 .widgets {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
 }
 
 .widget {
+  flex: 1 1 calc(25% - 1rem);
   background-color: var(--btn-primary-bg-hover);
   color: var(--btn-primary-text);
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 4px;
   text-align: center;
+  font-weight: 500;
+  transition: transform 0.2s ease;
+}
+
+.widget:hover {
+  transform: translateY(-2px);
 }
