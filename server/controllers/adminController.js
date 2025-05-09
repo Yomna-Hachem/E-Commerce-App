@@ -38,5 +38,50 @@ const setInventoryLevels= async (req, res) => {
       };
 
 
+      const addNewProduct = async (req, res) => {
+        const {
+          name,
+          description,
+          color,
+          size,
+          price,
+          image_url,
+          stock_quantity,
+          category_id,
+          product_tax_category_id
+        } = req.body;
+      
+        // Validate required fields
+        if (!name || price === undefined || stock_quantity === undefined) {
+          return res.status(400).json({ error: 'Missing required fields: name, price, or stock_quantity' });
+        }
+      
+        try {
+          const result = await pool.query(
+            `INSERT INTO Products (
+              name, description, color, price,
+              image_url,  category_id,
+              product_tax_category_id
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            RETURNING *`,
+            [
+              name,
+              description || null,
+              color || null,
+              price,
+              image_url || null,
+              stock_quantity,
+              category_id || null,
+              product_tax_category_id || null
+            ]
+          );
+      
+          res.status(201).json({ message: 'Product added successfully', product: result.rows[0] });
+        } catch (err) {
+          console.error('Error adding product:', err.message);
+          res.status(500).json({ error: 'Internal server error' });
+        }
+      };
+      
 
-module.exports = {adminWorks, setInventoryLevels};
+module.exports = {adminWorks, setInventoryLevels, addNewProduct};

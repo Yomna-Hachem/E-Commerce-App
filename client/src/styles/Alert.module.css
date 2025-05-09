@@ -41,3 +41,9 @@
 .alertButton:hover {
   background-color: var(--btn-primary-bg-hover);
 }
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}

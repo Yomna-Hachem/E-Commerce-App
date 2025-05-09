@@ -7,6 +7,9 @@ import Dashboard from '../adminSections/DashboardAdmin';
 import Orders from '../adminSections/OrdersAdmin';
 import Products from '../adminSections/ProductsAdmin';
 import Promotions from '../adminSections/PromotionsAdmin';
+import AddProduct from '../adminSections/AddProduct';
+import RefundManagement from '../adminSections/RefundsAdmin';
+
 
 function AdminMainPage() {
   const { user, isLoading } = useUserContext();
@@ -33,8 +36,11 @@ function AdminMainPage() {
   const renderSection = () => {
     switch (activeSection) {
       case 'orders': return <Orders />;
-      case 'products': return <Products />;
+      case 'products': return <Products  setActiveSection={setActiveSection}/>;
       case 'promotions': return <Promotions />;
+      case 'addProduct': return <AddProduct />;
+      case 'refunds': return <RefundManagement />;
+
       default: return <Dashboard />;
     }
   };
@@ -51,8 +57,10 @@ function AdminMainPage() {
           <ul>
             <li onClick={() => setActiveSection('dashboard')}>Dashboard</li>
             <li onClick={() => setActiveSection('orders')}>Order Management</li>
+            <li onClick={() => setActiveSection('refunds')}>Refunds Management</li>
             <li onClick={() => setActiveSection('products')}>Product Management</li>
             <li onClick={() => setActiveSection('promotions')}>Promotions</li>
+
           </ul>
         </aside>
 

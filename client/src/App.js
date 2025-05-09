@@ -6,6 +6,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // includes carousel, modal,
 
 import HomePage from './pages/HomePage';
 import Header from './components/Header'; 
+import Footer from './components/Footer';
 import AuthContainer from './pages/Authentication';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
@@ -61,6 +62,7 @@ const [error, setError] = useState(null);
         <Route path="/unauthorized" element={<h1>Unauthorized</h1>} />
         <Route path="/admin" element={<AdminMainPage />} />
       </Routes>
+      <Footer />
     </Router> 
     </CartDataProvider>
     </ProductProvider>

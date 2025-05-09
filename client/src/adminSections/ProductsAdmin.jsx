@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 const SIZES = ['Small', 'Medium', 'Large', 'XLarge'];
 
-const Products = () => {
+const Products = ({ setActiveSection }) => {
   const { products } = useProducts();
   const { stockMap, setStockMap, fetchStockData } = useCartDataContext();
   const LOW_STOCK_THRESHOLD = 5; // Define your low stock threshold here
@@ -133,7 +133,10 @@ const Products = () => {
         ))}
       </div>
 
-      <button className={styles.floatingButton} onClick={() => alert("Redirect to create product page")}>
+      <button
+        className={styles.floatingButton}
+        onClick={() => setActiveSection('addProduct')} // Switch to AddProduct section
+      >
         +
       </button>
 
