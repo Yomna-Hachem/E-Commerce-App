@@ -18,7 +18,7 @@ const loginUser = async (req, res) => {
 
     const user = result.rows[0];
     console.log(result.rows[0]);
-    console.log("😂😂😂");
+
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
 

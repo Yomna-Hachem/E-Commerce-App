@@ -4,13 +4,17 @@ const cors = require('cors');
 const path = require('path');  
 const cookieParser = require('cookie-parser');
 require('dotenv').config(); 
+// adjust the path as needed
+
+
 
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const adminRoutes = require('./routes/adminRoutes'); // Import admin routes
 const uploadRoutes = require('./routes/uploadRoutes');
-const ordersRoutes = require('./routes/ordersRoutes')
+const ordersRoutes = require('./routes/ordersRoutes');
+const uploadPrdouctImageRoutes = require('./routes/uploadProductImageRoutes'); 
 
 const app = express();
 const PORT = 5001;
@@ -32,6 +36,7 @@ app.use('/cart', cartRoutes);
 app.use('/upload', uploadRoutes);
 app.use('/orders', ordersRoutes);
 app.use('/admin', adminRoutes); // Add this line to include admin routes
+
 
 
 app.listen(PORT, () => {

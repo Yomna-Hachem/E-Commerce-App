@@ -8,6 +8,7 @@ import Orders from '../adminSections/OrdersAdmin';
 import Products from '../adminSections/ProductsAdmin';
 import Promotions from '../adminSections/PromotionsAdmin';
 import AddProduct from '../adminSections/AddProduct';
+import UpdateProduct from '../adminSections/UpdateProduct';
 // import AddPromotion from '../adminSections/AddPromotionAdmin';
 // import UpdatePromotion from '../adminSections/UpdatePromotionAdmin';
 // import UpdateOrder from '../adminSections/UpdateOrderAdmin';
@@ -36,16 +37,16 @@ function AdminMainPage() {
   if (user?.role !== 'admin') return <Navigate to="/unauthorized" />;
 
   const renderSection = () => {
+    if (activeSection.startsWith('updateProduct-')) {
+      const productId = activeSection.split('-')[1]; // Extract product ID from activeSection
+      return <UpdateProduct productId={productId} />; // Pass productId as a prop
+    }
+
     switch (activeSection) {
       case 'orders': return <Orders />;
-      case 'products': return <Products  setActiveSection={setActiveSection}/>;
+      case 'products': return <Products setActiveSection={setActiveSection} />;
       case 'promotions': return <Promotions />;
       case 'addProduct': return <AddProduct />;
-      // case 'addPromotion': return <AddPromotion />;
-      // case 'addOrder': return <AddOrder />;
-      // case 'updatePromotion': return <UpdatePromotion />;
-      // case 'updateOrder': return <UpdateOrder />;
-      
       default: return <Dashboard />;
     }
   };

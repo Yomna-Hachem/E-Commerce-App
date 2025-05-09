@@ -18,8 +18,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
+  min-height: 250px; /* Ensure consistent card height */
 }
 
 .productCard h3 {
@@ -32,28 +31,82 @@
 .productCard p {
   margin: 0.25rem 0;
   color: var(--text-body, #505050);
+  flex-grow: 1; /* Push buttons to bottom */
 }
 
-.productCard button {
-  margin-top: auto;
-  padding: 0.5rem 1rem;
+.lowStockWarning {
+  color: #d32f2f;
+  font-weight: bold;
+  margin: 8px 0;
+  font-size: 0.9em;
+}
+
+/* Button Container Styles */
+.buttonContainer {
+  margin-top: auto; /* Push to bottom of card */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.horizontalButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Button Styles */
+.updateButton {
+  flex: 1;
+  padding: 0.5rem;
   background-color: var(--btn-primary-bg, #b4cb6d);
   color: var(--btn-primary-text, white);
-  border: 2px solid var(--btn-primary-bg, #b4cb6d);
+  border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s, color 0.3s;
+  font-size: 0.9rem;
   font-family: var(--body-font, 'Jost', sans-serif);
+  transition: background-color 0.3s;
+}
+
+.updateButton:hover {
+  background-color: var(--btn-primary-bg-hover, #7a7e6e);
+}
+
+.deleteButton {
+  flex: 1;
+  padding: 0.5rem;
+  background-color: var(--btn-primary-bg, #b4cb6d);
+  color: var(--btn-danger-text, white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: var(--body-font, 'Jost', sans-serif);
+  transition: background-color 0.3s;
+}
+
+.deleteButton:hover {
+  background-color: var(--btn-secondary-bg-hover, #5a6268);
+}
+
+.manageStockButton {
+  padding: 0.5rem;
+  background-color: var(--btn-danger-bg, #d9534f);
+  color: var(--btn-secondary-text, white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: var(--body-font, 'Jost', sans-serif);
+  transition: background-color 0.3s;
   width: 100%;
 }
 
-.productCard button:hover {
-  background-color: var(--btn-primary-bg-hover, #7a7e6e);
-  color: var(--btn-primary-text, white);
-  border-color: var(--btn-primary-bg-hover, #7a7e6e);
+.manageStockButton:hover {
+  background-color: var(--btn-secondary-bg-hover, #5a6268);
 }
 
+/* Floating Button */
 .floatingButton {
   position: fixed;
   bottom: 2rem;
@@ -77,6 +130,7 @@
   background-color: var(--btn-primary-bg-hover, #7a7e6e);
 }
 
+/* Popup Styles */
 .popupOverlay {
   position: fixed;
   top: 0;
@@ -191,9 +245,8 @@
   color: var(--btn-primary-text, white);
 }
 
-.productCard .lowStockWarning {
-  color: #d32f2f ; /* Red color for warning */
-  font-weight: bold;
-  margin: 8px 0;
-  font-size: 0.9em;
+.outOfStock {
+  color: #d32f2f;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
 }

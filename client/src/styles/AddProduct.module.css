@@ -1,0 +1,165 @@
+.container {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+  
+  .title {
+    color: #2d3748;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .label {
+    color: #4a5568;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  
+  .input {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background-color: #f8fafc;
+  }
+  
+  .input:focus {
+    outline: none;
+    border-color: var(--btn-primary-bg);
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    background-color: #ffffff;
+  }
+  
+  .textarea {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    min-height: 120px;
+    resize: vertical;
+    transition: all 0.2s;
+    background-color: #f8fafc;
+  }
+  
+  .textarea:focus {
+    outline: none;
+    border-color: var(--btn-primary-bg);
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    background-color: #ffffff;
+  }
+  
+  .fileInput {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px dashed #cbd5e0;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .fileInput:hover {
+    border-color: var(--btn-primary-bg);
+    background-color: #ebf8ff;
+  }
+  
+  .submitButton {
+    background-color:var(--btn-primary-bg) ;
+    color: white;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 1rem;
+  }
+  
+  .submitButton:hover {
+    background-color: var(--btn-primary-bg-hover);
+    transform: translateY(-1px);
+  }
+  
+  .submitButton:active {
+    transform: translateY(0);
+  }
+
+  /* Add these styles to your existing CSS file */
+
+.selectWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f8fafc;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--btn-primary-bg);
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+  background-color: #ffffff;
+}
+
+.selectArrow {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #4a5568;
+  pointer-events: none;
+  transition: all 0.2s;
+}
+
+.select:focus + .selectArrow {
+  border-top-color: var(--btn-primary-bg);
+}
+
+/* Style the dropdown options */
+.select option {
+  padding: 0.5rem;
+  background-color: white;
+  color: #2d3748;
+}
+
+/* Style the disabled/default option differently */
+.select option[value=""][disabled] {
+  color: #a0aec0;
+}
