@@ -6,6 +6,7 @@ import styles from '../styles/PlaceOrder.module.css';
 import { useNavigate } from 'react-router-dom';
 
 
+
 const shippingRates = {
   'Cairo': 60,
   'Giza': 60,

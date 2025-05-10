@@ -1,12 +1,25 @@
 const pool = require('../db');
 const multer = require('multer');
 const path = require('path');
+const multer = require('multer');
+const path = require('path');
 
 const adminWorks = (req, res) => {
     console.log('Admin works!');
     res.json({ message: 'Reached adminWorks route' });
 };
 
+// Set up multer storage options
+const storage = multer.diskStorage({
+  destination: path.join(__dirname, '../../client/public/images'), // Store images in this folder
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Generate unique filename
+  },
+});
+
+const upload = multer({ storage }).single('image'); // Middleware for handling single image upload
+
+const setInventoryLevels = async (req, res) => {
 // Set up multer storage options
 const storage = multer.diskStorage({
   destination: path.join(__dirname, '../../client/public/images'), // Store images in this folder

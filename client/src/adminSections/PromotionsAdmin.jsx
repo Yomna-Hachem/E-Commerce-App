@@ -4,7 +4,7 @@ import { useProducts } from '../context/ProductContext';
 import styles from '../styles/Promotions.module.css';
 
 const PromotionsManagement = () => {
-  const { products, loading } = useProducts();
+  const { products, loading, setProducts } = useProducts();
   const [selectedProduct, setSelectedProduct] = useState('');
   const [discountValue, setDiscountValue] = useState('');
   const [activeCampaign, setActiveCampaign] = useState(null);
@@ -31,21 +31,31 @@ const PromotionsManagement = () => {
   const handleProductDiscountSubmit = async (e) => {
     e.preventDefault();
     if (!selectedProduct || discountValue === '') return;
+    console.log('Applying discount:',selectedProduct);
 
+    const discountPayload = [{
+      product_id: selectedProduct,
+      discount: parseFloat(discountValue)
+    }];
     try {
-      const response = await fetch('http://localhost:5001/update-discount', {
+      const response = await fetch('http://localhost:5001/admin/applyDiscount', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          productId: selectedProduct,
-          discount: parseFloat(discountValue)
-        })
+        credentials: 'include',
+        body: JSON.stringify({ discountPayload })
       });
 
       if (response.ok) {
         alert('Discount applied successfully');
         setSelectedProduct('');
         setDiscountValue('');
+        const updatedProducts = products.map(product =>
+          product.product_id === selectedProduct
+            ? { ...product, discount: parseFloat(discountValue) }
+            : product
+        );
+        setProducts(updatedProducts);
+
       } else {
         throw new Error('Failed to apply discount');
       }
@@ -57,29 +67,46 @@ const PromotionsManagement = () => {
 
   const handleCampaignSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedCampaignProducts.length || !campaignDiscount || !campaignStartDate) return;
+    if (!selectedCampaignProducts.length || !campaignDiscount){ 
+      return;}
+
+    const discountPayload = selectedCampaignProducts.map(productId => ({
+      product_id: productId,
+      discount: parseFloat(campaignDiscount)
+    }));
 
     try {
-      const response = await fetch('http://localhost:5001/create-campaign', {
+      console.log('Applying campaign discount:', discountPayload);
+      const response = await fetch('http://localhost:5001/admin/applyDiscount', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          productIds: selectedCampaignProducts,
-          discount: parseFloat(campaignDiscount),
-          startDate: campaignStartDate
-        })
+        credentials: 'include',
+        body: JSON.stringify({discountPayload})
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setActiveCampaign(data.campaign);
-        alert('Campaign started successfully');
+        // After discounts are applied, insert campaign into backend
+        await fetch('http://localhost:5001/admin/addCampaign', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ discountPayload, startDate: campaignStartDate, discount: campaignDiscount })
+        });
+        alert('Campaign discounts applied successfully');
+        setSelectedCampaignProducts([]);
+        setCampaignDiscount('');
+        const updatedProducts = products.map(product =>
+          selectedCampaignProducts.includes(product.product_id)
+            ? { ...product, discount: parseFloat(campaignDiscount) }
+            : product
+        );
+        setProducts(updatedProducts);
       } else {
-        throw new Error('Failed to start campaign');
+        throw new Error('Failed to apply campaign discounts');
       }
     } catch (error) {
-      console.error('Error starting campaign:', error);
-      alert('Error starting campaign');
+      console.error('Error applying campaign discounts:', error);
+      alert('Error applying campaign discounts');
     }
   };
 

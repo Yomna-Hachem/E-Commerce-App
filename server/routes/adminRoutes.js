@@ -6,6 +6,8 @@ const {addNewProduct} = require('../controllers/adminController');
 const { updateProduct } = require('../controllers/adminController');
 const { deleteProduct } = require('../controllers/adminController');
 const { authMiddleware } = require('../middleware/auth');
+const { applyDiscount } = require('../controllers/adminController');
+const { addCampaign } = require('../controllers/adminController');
 const router = express.Router();
 
 
@@ -14,4 +16,6 @@ router.post('/manageProducts', authMiddleware, isAdminMiddleware, setInventoryLe
 router.post('/addNewProduct', authMiddleware, isAdminMiddleware, addNewProduct);
 router.put('/updateProduct', authMiddleware, isAdminMiddleware, updateProduct);
 router.delete('/deleteProduct', authMiddleware, isAdminMiddleware, deleteProduct);
+router.post('/applyDiscount', authMiddleware, isAdminMiddleware, applyDiscount);
+router.post('/addCampaign', authMiddleware, isAdminMiddleware, addCampaign);
 module.exports = router;
