@@ -1,25 +1,12 @@
 const pool = require('../db');
 const multer = require('multer');
 const path = require('path');
-const multer = require('multer');
-const path = require('path');
 
 const adminWorks = (req, res) => {
     console.log('Admin works!');
     res.json({ message: 'Reached adminWorks route' });
 };
 
-// Set up multer storage options
-const storage = multer.diskStorage({
-  destination: path.join(__dirname, '../../client/public/images'), // Store images in this folder
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Generate unique filename
-  },
-});
-
-const upload = multer({ storage }).single('image'); // Middleware for handling single image upload
-
-const setInventoryLevels = async (req, res) => {
 // Set up multer storage options
 const storage = multer.diskStorage({
   destination: path.join(__dirname, '../../client/public/images'), // Store images in this folder
@@ -170,4 +157,49 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-module.exports = { adminWorks, setInventoryLevels, addNewProduct, updateProduct, deleteProduct };
+const applyDiscount = async (req, res) => {
+  const { discountPayload } = req.body;
+  console.log('Applying discount:', discountPayload);
+
+  try {
+    for (const item of discountPayload) {
+      await pool.query(
+        `UPDATE products
+         SET discount = $2
+         WHERE product_id = $1`,
+        [item.product_id, item.discount]
+      );
+    }
+
+    res.status(200).json({ message: 'Discounts applied successfully' });
+  } catch (err) {
+    console.error('Error applying discounts:', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const addCampaign = async (req, res) => {
+  const { discountPayload } = req.body;
+
+  if (!Array.isArray(discountPayload) || discountPayload.length === 0) {
+    return res.status(400).json({ error: 'Invalid or empty payload' });
+  }
+
+  try {
+    for (const { product_id, discount } of discountPayload) {
+      // Insert campaign entry for each product
+      await pool.query(
+        `INSERT INTO campaign_item (product_id, discount, start_date)
+         VALUES ($1, $2, NOW())`,
+        [product_id, discount]
+      );
+    }
+
+    res.status(200).json({ message: 'Campaigns inserted successfully' });
+  } catch (error) {
+    console.error('Add campaign error:', error.message);
+    res.status(500).json({ error: 'Server error while inserting campaigns' });
+  }
+};
+
+module.exports = { adminWorks, setInventoryLevels, addNewProduct, updateProduct, deleteProduct, applyDiscount, addCampaign };
