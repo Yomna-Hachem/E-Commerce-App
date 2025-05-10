@@ -5,6 +5,7 @@ import { useProducts } from '../context/ProductContext';
 import styles from '../styles/PlaceOrder.module.css';
 import { useNavigate } from 'react-router-dom';
 
+
 const shippingRates = {
   'Cairo': 60,
   'Giza': 60,
@@ -111,14 +112,14 @@ const PlaceOrder = () => {
     }, 0);
 
     try {
-const payload = {
-  ...formData,
-  user_id: user?.user_id,
-  cartData: cartItemsWithProducts,
-  payment_method: paymentMethod,
-  price: currentSubtotal + shipping + tax
-};
+      const payload = {
+        ...formData,
+        user_id: user?.user_id,
+        cartData: cartItemsWithProducts,
+        payment_method: paymentMethod,
+        price: currentSubtotal + (shippingRates[formData.state] ?? 0)
 
+      };
 
       console.log('Placing order for user 🦮');
 
@@ -330,10 +331,11 @@ const payload = {
           </div>
 
           <div className={styles.priceBreakdown}>
-            <div className={styles.priceRow}>
-              <span>Shipping</span>
-              <span>${shipping.toFixed(2)}</span>
-            </div>
+          <div className={styles.priceRow}>
+            <span>Shipping</span>
+            <span>${shipping.toFixed(2)}</span>
+          </div>
+
             <div className={styles.priceRow}>
               <span>Tax</span>
               <span>${tax.toFixed(2)}</span>

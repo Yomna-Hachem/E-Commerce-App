@@ -1,11 +1,23 @@
 const pool = require('../db');
+const multer = require('multer');
+const path = require('path');
 
 const adminWorks = (req, res) => {
     console.log('Admin works!');
     res.json({ message: 'Reached adminWorks route' });
 };
 
-const setInventoryLevels= async (req, res) => {
+// Set up multer storage options
+const storage = multer.diskStorage({
+  destination: path.join(__dirname, '../../client/public/images'), // Store images in this folder
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Generate unique filename
+  },
+});
+
+const upload = multer({ storage }).single('image'); // Middleware for handling single image upload
+
+const setInventoryLevels = async (req, res) => {
     console.log('Admin baby!');
     const { stockUpdates } = req.body; // Assuming stockUpdates is an array of objects with product_id and quantity
     console.log(stockUpdates);
@@ -24,7 +36,7 @@ const setInventoryLevels= async (req, res) => {
           `, [
             stockUpdates[0].product_id,
             stockUpdates[0].quantity || 0,
-            stockUpdates[1].quantity|| 0,
+            stockUpdates[1].quantity || 0,
             stockUpdates[2].quantity || 0,
             stockUpdates[3].quantity || 0
           ]);
@@ -37,51 +49,157 @@ const setInventoryLevels= async (req, res) => {
         }
       };
 
+const addNewProduct = async (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      console.error('Error uploading image:', err);
+      return res.status(500).json({ error: 'Error uploading image' });
+    }
 
-      const addNewProduct = async (req, res) => {
-        const {
+    const {
+      name,
+      description,
+      color,
+      price,
+      category_id,
+    } = req.body;
+
+    // Validate required fields
+    if (!name || price === undefined) {
+      return res.status(400).json({ error: 'Missing required fields: name or price' });
+    }
+
+    // Get the image URL
+    const imageUrl = req.file ? `/images/${req.file.filename}` : null;
+
+    try {
+      // Insert product into the database
+      const result = await pool.query(
+        `INSERT INTO Products (
+          name, description, color, price,
+          image_url, category_id
+        ) VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING *`,
+        [
           name,
-          description,
-          color,
-          size,
+          description || null,
+          color || null,
           price,
-          image_url,
-          stock_quantity,
-          category_id,
-          product_tax_category_id
-        } = req.body;
-      
-        // Validate required fields
-        if (!name || price === undefined || stock_quantity === undefined) {
-          return res.status(400).json({ error: 'Missing required fields: name, price, or stock_quantity' });
-        }
-      
-        try {
-          const result = await pool.query(
-            `INSERT INTO Products (
-              name, description, color, price,
-              image_url,  category_id,
-              product_tax_category_id
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-            RETURNING *`,
-            [
-              name,
-              description || null,
-              color || null,
-              price,
-              image_url || null,
-              stock_quantity,
-              category_id || null,
-              product_tax_category_id || null
-            ]
-          );
-      
-          res.status(201).json({ message: 'Product added successfully', product: result.rows[0] });
-        } catch (err) {
-          console.error('Error adding product:', err.message);
-          res.status(500).json({ error: 'Internal server error' });
-        }
-      };
-      
+          imageUrl, // Use the uploaded image URL
+          category_id || null,
+        ]
+      );
 
-module.exports = {adminWorks, setInventoryLevels, addNewProduct};
+      res.status(201).json({
+        success: true,
+        message: 'Product added successfully',
+        product: result.rows[0],
+      });
+    } catch (err) {
+      console.error('Error adding product:', err.message);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+};
+
+const updateProduct = async (req, res) => {
+  const { product_id, name, description, color, price, category_id } = req.body;
+
+  try {
+    
+    const result = await pool.query(
+      `UPDATE Products
+       SET name = $1, description = $2, color = $3, price = $4, category_id = $5
+       WHERE product_id = $6
+       RETURNING *`,
+      [name, description, color, price, category_id, product_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Product updated successfully',
+      product: result.rows[0],
+    });
+  } catch (err) {
+    console.error('Error updating product:', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+const deleteProduct = async (req, res) => {
+  const { product_id } = req.body;
+  console.log('Deleting product with ID:', product_id);
+
+  try {
+    
+    const result = await pool.query(
+      `DELETE FROM Products
+       WHERE product_id = $1
+       RETURNING *`,
+      [product_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Product deleted successfully',
+      product: result.rows[0],
+    });
+  } catch (err) {
+    console.error('Error deleting product:', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const applyDiscount = async (req, res) => {
+  const { discountPayload } = req.body;
+  console.log('Applying discount:', discountPayload);
+
+  try {
+    for (const item of discountPayload) {
+      await pool.query(
+        `UPDATE products
+         SET discount = $2
+         WHERE product_id = $1`,
+        [item.product_id, item.discount]
+      );
+    }
+
+    res.status(200).json({ message: 'Discounts applied successfully' });
+  } catch (err) {
+    console.error('Error applying discounts:', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const addCampaign = async (req, res) => {
+  const { discountPayload } = req.body;
+
+  if (!Array.isArray(discountPayload) || discountPayload.length === 0) {
+    return res.status(400).json({ error: 'Invalid or empty payload' });
+  }
+
+  try {
+    for (const { product_id, discount } of discountPayload) {
+      // Insert campaign entry for each product
+      await pool.query(
+        `INSERT INTO campaign_item (product_id, discount, start_date)
+         VALUES ($1, $2, NOW())`,
+        [product_id, discount]
+      );
+    }
+
+    res.status(200).json({ message: 'Campaigns inserted successfully' });
+  } catch (error) {
+    console.error('Add campaign error:', error.message);
+    res.status(500).json({ error: 'Server error while inserting campaigns' });
+  }
+};
+
+module.exports = { adminWorks, setInventoryLevels, addNewProduct, updateProduct, deleteProduct, applyDiscount, addCampaign };
