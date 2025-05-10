@@ -62,6 +62,7 @@ const PlaceOrder = () => {
   const [discountCode, setDiscountCode] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('credit_card');
   const [beingPlaced, setBeingPlaced] = useState(false);
+  const [discountAmount, setDiscountAmount] = useState(0);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -83,22 +84,27 @@ const PlaceOrder = () => {
     });
   }, [cartData, products]);
 
-  const { subtotal, shipping, total, itemCount } = useMemo(() => {
-    const calculatedSubtotal = cartItemsWithProducts.reduce((sum, item) => {
-      const price = parseFloat(item.price) || 0;
-      const quantity = parseInt(item.quantity) || 0;
-      return sum + (price * quantity);
-    }, 0);
+const { subtotal, shipping, total, itemCount } = useMemo(() => {
+  const calculatedSubtotal = cartItemsWithProducts.reduce((sum, item) => {
+    const price = parseFloat(item.price) || 0;
+    const quantity = parseInt(item.quantity) || 0;
+    return sum + (price * quantity); 
+  }, 0);
+
+  const shipping = shippingRates[formData.state] ?? 0;
+
+  const discount = discountAmount; // Use discount rate from state
+  console.log('Discount Amount:', discountAmount);
   
-    const shipping = shippingRates[formData.state] ?? 0;
-  
-    return {
-      subtotal: calculatedSubtotal,
-      shipping,
-      total: calculatedSubtotal + shipping,
-      itemCount: cartItemsWithProducts.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0)
-    };
-  }, [cartItemsWithProducts, formData.state]);
+  const finalTotal = (((calculatedSubtotal *1.14) + shipping) * (1- discount));
+  console.log('total', finalTotal);
+  return {
+    subtotal: calculatedSubtotal,
+    shipping,
+    total: finalTotal, // Adjusted total
+    itemCount: cartItemsWithProducts.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0)
+  };
+}, [cartItemsWithProducts, formData.state, discountAmount]);
   
 
   const handlePlaceOrder = async (event) => {
@@ -116,8 +122,9 @@ const PlaceOrder = () => {
         ...formData,
         user_id: user?.user_id,
         cartData: cartItemsWithProducts,
+        shipping_cost: shippingRates[formData.state] ?? 0,
         payment_method: paymentMethod,
-        price: currentSubtotal + (shippingRates[formData.state] ?? 0)
+        price: (currentSubtotal) + (shippingRates[formData.state] ?? 0)
 
       };
 
@@ -146,6 +153,33 @@ const PlaceOrder = () => {
       setBeingPlaced(false);
     }
   };
+
+  const handleApplyDiscount = async () => {
+    console.log('Applying discount code:', discountCode);
+  if (!discountCode) return;
+
+  try {
+    const response = await fetch(`http://localhost:5001/cart/coupons/${discountCode}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
+    });
+
+    const discountData = await response.json();
+    if (discountData.success) {
+      const discountAmount = discountData.discountAmount || 0;
+      setDiscountCode(discountCode); // Set the discount code
+      setDiscountAmount(discountAmount); // Store the discount amount
+      alert(`Discount applied successfully!`);
+    } else {
+      alert('Invalid discount code');
+    }
+  } catch (error) {
+    console.error('Error applying discount:', error);
+    alert('Error applying discount');
+  }
+};
+
 
   // Calculate tax as 14% of subtotal
   const tax = useMemo(() => subtotal * 0.14, [subtotal]);
@@ -327,24 +361,38 @@ const PlaceOrder = () => {
               onChange={(e) => setDiscountCode(e.target.value)}
               className={styles.discountInput}
             />
-            <button type="button" className={styles.discountButton}>Apply</button>
+            <button 
+              type="button" 
+              className={styles.discountButton} 
+              onClick={handleApplyDiscount} // Bind apply function to button
+            >
+              Apply
+            </button>
           </div>
 
-          <div className={styles.priceBreakdown}>
+
+        <div className={styles.priceBreakdown}>
           <div className={styles.priceRow}>
             <span>Shipping</span>
             <span>${shipping.toFixed(2)}</span>
           </div>
 
-            <div className={styles.priceRow}>
-              <span>Tax</span>
-              <span>${tax.toFixed(2)}</span>
-            </div>
-            <div className={`${styles.priceRow} ${styles.totalRow}`}>
-              <span>Total</span>
-              <span>${(subtotal + shipping + tax).toFixed(2)}</span>
-            </div>
+          <div className={styles.priceRow}>
+            <span>Tax</span>
+            <span>${tax.toFixed(2)}</span>
           </div>
+
+          <div className={styles.priceRow}>
+            <span>Discount</span>
+            <span>${parseFloat(discountAmount).toFixed(2)} %</span> {/* Show discount amount */}
+          </div>
+
+          <div className={`${styles.priceRow} ${styles.totalRow}`}>
+            <span>Total</span>
+            <span>${total.toFixed(2)}</span>
+          </div>
+        </div>
+
 
           <div className={styles.savingsNotice}>
             TOTAL SAVINGS $95.00

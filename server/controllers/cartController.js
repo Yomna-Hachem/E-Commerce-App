@@ -91,12 +91,13 @@ const removeFromCart = async (req, res) => {
         "shipping_cost",
         "address_id"
       ) VALUES (
-        $1, 95, $2
+        $1, $2, $3
       )
       RETURNING "order_id";
       `,
       [
         formData.user_id,          // $1 // $2
+        formData.shipping_cost, // $2
         address_id      // $3
       ]
     );
@@ -122,7 +123,7 @@ const removeFromCart = async (req, res) => {
         order_id,          // $1
         item.product_id,        // $2
         item.quantity,          // $3
-        item.price, // $4
+        (item.price) * 1.14, // $4
         item.size               // $8
       ]
     );
@@ -182,4 +183,49 @@ const removeFromCart = async (req, res) => {
 
   }
 
-module.exports = {getCartData, addToCart, removeFromCart, placeOrder};
+const checkCouponValidity = async(req, res) => {
+  const { userId } = req.user; 
+ // Assuming you're sending the coupon code in the request bod
+  const { code } = req.params;
+  console.log('User ID:', userId);
+  console.log('Coupon Code:', code);
+
+  try {
+    // Query to check if the coupon is valid for the given user
+    const result = await pool.query(
+      
+  `SELECT code, discount_value, active
+   FROM coupons 
+   WHERE code = $1 AND user_id = $2`,
+       
+      [code, userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Invalid discount code' });
+    }
+
+    const coupon = result.rows[0];
+    console.log('Coupon:', coupon);
+
+    // Check if the coupon is active and not expired
+    if (!coupon.active) {
+      return res.status(400).json({ success: false, message: 'Coupon is inactive' });
+    }
+
+
+    // If all checks pass, return the discount value
+    return res.json({
+      success: true,
+      discountAmount: coupon.discount_value,
+    });
+  } catch (error) {
+    console.error('Error checking coupon validity:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+}
+
+
+
+
+module.exports = {getCartData, addToCart, removeFromCart, placeOrder, checkCouponValidity};
