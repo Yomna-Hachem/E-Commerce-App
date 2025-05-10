@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState} from 'react';
 import styles from '../styles/Products.module.css';
 import { useProducts } from '../context/ProductContext';
 import { useCartDataContext } from '../context/CartDataContext';

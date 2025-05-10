@@ -5,38 +5,6 @@ import { useProducts } from '../context/ProductContext';
 import styles from '../styles/PlaceOrder.module.css';
 import { useNavigate } from 'react-router-dom';
 
-const shippingRates = {
-  'Cairo': 60,
-  'Giza': 60,
-  'Alexandria': 70,
-  'Aswan': 100,
-  'Asyut': 100,
-  'Beheira': 100,
-  'Beni Suef': 100,
-  'Dakahlia': 90,
-  'Damietta': 90,
-  'Faiyum': 80,
-  'Gharbia': 80,
-  'Ismailia': 80,
-  'Kafr El Sheikh': 70,
-  'Luxor': 100,
-  'Matrouh': 100,
-  'Minya': 70,
-  'Monufia': 70,
-  'New Valley': 75,
-  'North Sinai': 130,
-  'Port Said': 70,
-  'Qalyubia': 80,
-  'Qena': 90,
-  'Red Sea': 120,
-  'Sharqia': 90,
-  'Sohag': 100,
-  'South Sinai': 120,
-  'Suez': 75,
-  'Helwan': 65,
-  '6th of October': 60,
-};
-
 
 const shippingRates = {
   'Cairo': 60,

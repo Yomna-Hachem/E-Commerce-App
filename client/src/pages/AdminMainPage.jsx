@@ -9,6 +9,7 @@ import Products from '../adminSections/ProductsAdmin';
 import Promotions from '../adminSections/PromotionsAdmin';
 import AddProduct from '../adminSections/AddProduct';
 import UpdateProduct from '../adminSections/UpdateProduct';
+import RefundManagement from '../adminSections/RefundsAdmin';
 // import AddPromotion from '../adminSections/AddPromotionAdmin';
 // import UpdatePromotion from '../adminSections/UpdatePromotionAdmin';
 // import UpdateOrder from '../adminSections/UpdateOrderAdmin';
@@ -47,6 +48,7 @@ function AdminMainPage() {
       case 'promotions': return <Promotions />;
       case 'addProduct': return <AddProduct />;
       case 'refunds': return <RefundManagement />;
+      case 'orders': return <Orders setActiveSection={setActiveSection} />;
       default: return <Dashboard />;
     
     }
