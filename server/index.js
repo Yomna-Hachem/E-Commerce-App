@@ -4,8 +4,6 @@ const cors = require('cors');
 const path = require('path');  
 const cookieParser = require('cookie-parser');
 require('dotenv').config(); 
-// adjust the path as needed
-
 
 
 const productRoutes = require('./routes/productRoutes');
@@ -40,5 +38,5 @@ app.use('/admin', adminRoutes); // Add this line to include admin routes
 
 
 app.listen(PORT, () => {
-  console.log(`✅ Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

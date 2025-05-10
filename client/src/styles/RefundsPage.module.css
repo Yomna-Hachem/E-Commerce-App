@@ -1,0 +1,138 @@
+.container {
+  padding: 2rem;
+  font-family: var(--body-font);
+}
+
+.filterControls {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filterControls button {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  background-color: transparent;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterControls button:hover {
+  background-color: var(--btn-primary-bg);
+  color: white;
+}
+
+.activeFilter {
+  background-color: var(--btn-primary-bg) !important;
+  color: white;
+}
+
+.refundList {
+  margin-top: 1rem;
+}
+
+.refundsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.refundsTable th, .refundsTable td {
+  padding: 0.75rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.refundsTable th {
+  font-weight: 600;
+  color: #333;
+  background-color: var(--bg-offwhite);
+}
+
+.statusBadge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+.viewButton {
+  padding: 0.4rem 0.9rem;
+  background-color: var(--btn-primary-bg);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.viewButton:hover {
+  background-color: var(--btn-primary-bg-hover);
+}
+
+.refundModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.refundDetails {
+  margin-top: 1.5rem;
+}
+
+.itemsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.itemsTable th, .itemsTable td {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.totalSection {
+  margin-top: 1rem;
+}
+
+.statusControls {
+  margin-top: 1.5rem;
+}
+
+.statusButtons button {
+  margin-right: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

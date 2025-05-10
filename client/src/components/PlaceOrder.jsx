@@ -38,6 +38,39 @@ const shippingRates = {
 };
 
 
+const shippingRates = {
+  'Cairo': 60,
+  'Giza': 60,
+  'Alexandria': 70,
+  'Aswan': 100,
+  'Asyut': 100,
+  'Beheira': 100,
+  'Beni Suef': 100,
+  'Dakahlia': 90,
+  'Damietta': 90,
+  'Faiyum': 80,
+  'Gharbia': 80,
+  'Ismailia': 80,
+  'Kafr El Sheikh': 70,
+  'Luxor': 100,
+  'Matrouh': 100,
+  'Minya': 70,
+  'Monufia': 70,
+  'New Valley': 75,
+  'North Sinai': 130,
+  'Port Said': 70,
+  'Qalyubia': 80,
+  'Qena': 90,
+  'Red Sea': 120,
+  'Sharqia': 90,
+  'Sohag': 100,
+  'South Sinai': 120,
+  'Suez': 75,
+  'Helwan': 65,
+  '6th of October': 60,
+};
+
+
 const PlaceOrder = () => {
   const { cartData, setCartData, removeFromCart, fetchStockData } = useCartDataContext();
   const { user } = useUserContext();
@@ -145,6 +178,9 @@ const PlaceOrder = () => {
       setBeingPlaced(false);
     }
   };
+
+  // Calculate tax as 14% of subtotal
+  const tax = useMemo(() => subtotal * 0.14, [subtotal]);
 
   return (
     <form className={styles.container} onSubmit={handlePlaceOrder}>
@@ -333,12 +369,12 @@ const PlaceOrder = () => {
           </div>
 
             <div className={styles.priceRow}>
-              <span>Shipping</span>
-              <span>$0 FREE</span>
+              <span>Tax</span>
+              <span>${tax.toFixed(2)}</span>
             </div>
             <div className={`${styles.priceRow} ${styles.totalRow}`}>
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>${(subtotal + shipping + tax).toFixed(2)}</span>
             </div>
           </div>
 

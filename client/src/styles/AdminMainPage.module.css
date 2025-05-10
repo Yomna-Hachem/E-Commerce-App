@@ -1,18 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap');
 
-:root {
-  --bg-offwhite:           #f2f2ef;
-  --bg-input:              #ffffff;
-  --border-light:          #dcdcdc;
-  --text-heading:          #1f1f1f;
-  --text-body:             #505050;
-  --btn-primary-bg:        #b4cb6d;
-  --btn-primary-bg-hover:  #7a7e6e;
-  --btn-primary-text:      white;
 
-  --body-font:    'Jost', sans-serif;
-  --heading-font: 'Marcellus', serif;
-}
 
 .adminContainer {
   font-family: var(--body-font);

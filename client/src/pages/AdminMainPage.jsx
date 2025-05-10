@@ -43,11 +43,12 @@ function AdminMainPage() {
     }
 
     switch (activeSection) {
-      case 'orders': return <Orders />;
-      case 'products': return <Products setActiveSection={setActiveSection} />;
+      case 'products': return <Products  setActiveSection={setActiveSection}/>;
       case 'promotions': return <Promotions />;
       case 'addProduct': return <AddProduct />;
+      case 'refunds': return <RefundManagement />;
       default: return <Dashboard />;
+    
     }
   };
 
@@ -63,8 +64,10 @@ function AdminMainPage() {
           <ul>
             <li onClick={() => setActiveSection('dashboard')}>Dashboard</li>
             <li onClick={() => setActiveSection('orders')}>Order Management</li>
+            <li onClick={() => setActiveSection('refunds')}>Refunds Management</li>
             <li onClick={() => setActiveSection('products')}>Product Management</li>
             <li onClick={() => setActiveSection('promotions')}>Promotions</li>
+
           </ul>
         </aside>
 

@@ -44,40 +44,117 @@ const getUserOrders = async (req, res) => {
   };
   
   
-  
-  const getAllOrders = async (req, res) => {
-    try {
-      const query = `
-        SELECT o.*,
-               u.email,
-               COALESCE(SUM(oi.subtotal), 0) AS subtotal_sum,
-               COALESCE(SUM(oi.tax_amount), 0) AS total_tax,
-               json_agg(json_build_object(
-                 'order_item_id', oi.order_item_id,
-                 'product_id', oi.product_id,
-                 'quantity', oi.quantity,
-                 'price_at_purchase', oi.price_at_purchase,
-                 'subtotal', oi.subtotal,
-                 'tax_amount', oi.tax_amount
-               )) AS items
-        FROM Orders o
-        LEFT JOIN OrderItems oi ON o.order_id = oi.order_id
-        LEFT JOIN Users u ON o.user_id = u.user_id
-        GROUP BY o.order_id, u.email
-        ORDER BY o.created_at DESC;
-      `;
-  
-      const result = await pool.query(query);
-      res.json(result.rows);
-    } catch (err) {
-      console.error('Error fetching all orders:', err);
-      res.status(500).json({ error: 'Failed to fetch all orders' });
-    }
-  };
+const getAllOrders = async (req, res) => {
+  try {
+    const query = `
+      SELECT o.*,
+             u.email,
+             COALESCE(SUM(oi.subtotal), 0) AS subtotal_sum,
+             COALESCE(SUM(oi.tax_amount), 0) AS total_tax,
+             json_agg(json_build_object(
+               'order_item_id', oi.order_item_id,
+               'product_id', oi.product_id,
+               'quantity', oi.quantity,
+               'price_at_purchase', oi.price_at_purchase,
+               'subtotal', oi.subtotal,
+               'tax_amount', oi.tax_amount
+             )) AS items
+      FROM Orders o
+      LEFT JOIN OrderItems oi ON o.order_id = oi.order_id
+      LEFT JOIN Users u ON o.user_id = u.user_id
+      WHERE NOT EXISTS (
+        SELECT 1 FROM Refunds r WHERE r.order_id = o.order_id
+      )
+      GROUP BY o.order_id, u.email
+      ORDER BY o.created_at DESC;
+    `;
 
-  
-const updateOrderStatus = async (req, res) => {
+    const result = await pool.query(query);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching all orders:', err);
+    res.status(500).json({ error: 'Failed to fetch all orders' });
+  }
 };
+
+const getAllRefundedOrders = async (req, res) => {
+  try {
+    const query = `
+      SELECT o.*,
+             u.email,
+             COALESCE(SUM(oi.subtotal), 0) AS subtotal_sum,
+             COALESCE(SUM(oi.tax_amount), 0) AS total_tax,
+             json_agg(json_build_object(
+               'order_item_id', oi.order_item_id,
+               'product_id', oi.product_id,
+               'quantity', oi.quantity,
+               'price_at_purchase', oi.price_at_purchase,
+               'subtotal', oi.subtotal,
+               'tax_amount', oi.tax_amount
+             )) AS items,
+             json_agg(DISTINCT jsonb_build_object(
+               'refund_id', r.refund_id,
+               'customer_explanation', r.customer_explanation,
+               'status', o.status
+             )) AS refunds
+      FROM Orders o
+      LEFT JOIN OrderItems oi ON o.order_id = oi.order_id
+      LEFT JOIN Users u ON o.user_id = u.user_id
+      JOIN Refunds r ON r.order_id = o.order_id
+      GROUP BY o.order_id, u.email
+      ORDER BY o.created_at DESC;
+    `;
+
+    const result = await pool.query(query);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching refunded orders:', err);
+    res.status(500).json({ error: 'Failed to fetch refunded orders' });
+  }
+};
+
+
+
+
+const updateOrderStatus = async (req, res) => {
+  const { order_id, status } = req.body;
+
+  try {
+    const orderCheck = await pool.query(
+      'SELECT * FROM orders WHERE order_id = $1',
+      [order_id]
+    );
+
+    if (orderCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    await pool.query(
+      'UPDATE orders SET status = $1 WHERE order_id = $2',
+      [status, order_id]
+    );
+
+    res.status(200).json({ message: 'Order status updated successfully' });
+  } catch (err) {
+    console.error('Error updating order status:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const updateRefundStatus = async (req, res) => {
+  const { order_id, status } = req.body;  
+  try {
+    await pool.query(
+      'UPDATE orders SET status = $1 WHERE order_id = $2',
+      [status, order_id]
+    );
+    res.status(200).json({ message: 'Refund status updated successfully' });
+  } catch (err) {
+    console.error('Error updating refund status:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
 
 const cancelOrder = async (req, res) => {
   const { orderId } = req.params;
@@ -190,5 +267,5 @@ const requestRefund = async (req, res) => {
 
 
 
-module.exports= {getUserOrders, getAllOrders, updateOrderStatus, cancelOrder, requestRefund};
+module.exports= {getUserOrders, getAllOrders, updateOrderStatus, cancelOrder, requestRefund, getAllRefundedOrders, updateRefundStatus};
 

@@ -4,6 +4,7 @@ import { useProducts } from '../context/ProductContext';
 import { useCartDataContext } from '../context/CartDataContext';
 import ConfirmationComponent from '../components/confirmationComponent';
 import AlertComponent from '../components/AlertComponent';
+import { useMemo } from 'react';
 const SIZES = ['Small', 'Medium', 'Large', 'XLarge'];
 const LOW_STOCK_THRESHOLD = 5;
 
