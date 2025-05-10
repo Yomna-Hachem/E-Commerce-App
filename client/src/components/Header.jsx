@@ -33,7 +33,7 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>My Clothing Store</div>
+      <div className={styles.logo}>Luxe & Co.</div>
 
       <button className={styles.menuToggle} onClick={toggleMenu} aria-label="Toggle menu">
         {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
@@ -55,7 +55,6 @@ const Header = () => {
             <a onClick={() => handleCategoryClick('women')}>Women</a>
             <a onClick={() => handleCategoryClick('sportswear')}>Sportswear</a>
             <a onClick={() => handleCategoryClick('bestsellers')}>Bestsellers</a>
-            <a onClick={() => handleCategoryClick('new')}>New Arrivals</a>
           </div>
         </div>
 

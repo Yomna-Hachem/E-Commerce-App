@@ -9,7 +9,6 @@ const UpdateProduct = ({ productId }) => {
     '1b1a1886-b759-406a-9702-019846e0819e': 'Women',
     'ba0ab28c-250c-43d8-8336-a9bc81ffd334': 'Sportswear',
     '0c1022e2-2f45-4867-a179-c1902c3bcd9d': 'Bestsellers',
-    '574f4d75-c70d-41ff-b31a-65dc5896672d': 'New Arrivals',
   };
 
   const { products, loading } = useProducts();
