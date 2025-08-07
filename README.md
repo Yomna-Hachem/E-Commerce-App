@@ -2,11 +2,11 @@
 
 A full-stack JavaScript shopping application with real-time cart functionality and dynamic product pages.
 
-## 🚀 Overview
+## Overview
 
 This project is a simple e-commerce platform built using HTML, CSS, and JavaScript. It simulates the core functionality of an online shopping website, including product listing, cart updates, quantity changes, and checkout behavior — all in the frontend.
 
-## ✨ Features
+## Features
 
 - Dynamic product listing
 - Real-time cart updates
@@ -15,7 +15,7 @@ This project is a simple e-commerce platform built using HTML, CSS, and JavaScri
 - Responsive design
 - Discounts and promotional campaigns
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend:** React, Bootstrap  
 - **Backend:** Node.js, Express  
